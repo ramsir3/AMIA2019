@@ -8,27 +8,37 @@
 # ) AS 'baseline_Scr'
 
 def calcBaseline(age, ethnicity, sex, scr):
+	# print(age, ethnicity, sex, scr)
 	s = 0.742 if sex == "F" else 1
 	e = 1.21 if "BLACK" in ethnicity else 1
 	bl = (75/(s*e*186*(float(age)**-0.203)))**-(1/1.154)
 	return bl, float(scr)/bl
 
-with open('./data/raw/mimic3Scr.csv') as fin:
-	with open('./data/processed/mimic3ScrBaseline.csv', 'w') as fout:
-		i = 0
-		for line in fin:
-			i += 1
-			line = line.strip()
-			# print(line)
-			sline = line[1:-1].split("\",\"")
-			# print(sline)
-			try:
-				bl, r = calcBaseline(sline[3], sline[4], sline[5], sline[7])
+def run(fnin, fnout, debug=False):
+	with open(fnin) as fin:
+		with open(fnout, 'w') as fout:
+			i = 0
+			for line in fin:
+				i += 1
+				line = line.strip()
+				if debug: print(line)
+				sline = line.replace("\"",'').split(',')
+
+				if debug: print(sline)
+				# try:
+				bl, r = calcBaseline(sline[3], sline[4], sline[5], sline[8])
 				line = "%s,\"%f\",\"%f\"\n"%(line,bl,r)
-				# print(line)
+				if debug: print(line)
 				fout.write(line)
-				if i%100 == 0:
+				if debug and i%100 == 0:
 					print(i)
-			except:
-				print("error on line", i)
-			
+				# except:
+				# 	print("error on line", i, ":")
+				# 	print(line)
+				
+				if debug and i == 10:
+					break
+			print("total lines:", i)
+
+run('./data/raw/mimic3Scr.csv', './data/processed/mimic3ScrBaseline.csv')
+# run('./data/raw/mimic3Scr.csv', './data/processed/mimic3ScrBaseline.csv', debug=True)

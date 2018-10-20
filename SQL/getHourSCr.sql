@@ -11,7 +11,6 @@ FROM
       api.ETHNICITY,
       api.GENDER,
       TIMESTAMPDIFF(MINUTE, api.ADMITTIME, l.CHARTTIME) AS 'time',
-      l.ITEMID,
       l.VALUENUM,
       l.VALUEUOM
     FROM
