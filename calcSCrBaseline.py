@@ -26,7 +26,7 @@ def run(fnin, fnout, debug=False):
 
 				if debug: print(sline)
 				# try:
-				bl, r = calcBaseline(sline[3], sline[4], sline[5], sline[8])
+				bl, r = calcBaseline(sline[3], sline[4], sline[5], sline[7])
 				line = "%s,\"%f\",\"%f\"\n"%(line,bl,r)
 				if debug: print(line)
 				fout.write(line)

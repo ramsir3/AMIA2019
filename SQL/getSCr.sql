@@ -87,6 +87,5 @@ FROM
 ORDER BY
   apil.SUBJECT_ID,
   apil.HADM_ID,
-  apil.ITEMID,
   apil.time,
   apil.VALUENUM
