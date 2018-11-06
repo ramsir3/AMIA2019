@@ -1,0 +1,39 @@
+Development of a Multicenter Ward–Based AKI Prediction Model
+
+demographics
+	age
+	sex
+
+vital signs
+	respiratory rate
+	heart rate
+	temperature
+	pulse pressure index [pulse pressureto-systolic BP ratio]
+	systolic BP
+	diastolic BP
+	oxygen saturation
+	mental status
+
+laboratory values
+	basic metabolic panel
+		sodium
+		potassium
+		carbon dioxide
+		anion gap
+		glucose
+		calcium
+		BUN
+		SCr
+
+	complete blood count
+		white blood cell count
+		hemoglobin
+		platelets
+
+	liver function test
+		total protein
+		albumin
+		total bilirubin
+		aspartate aminotransferase
+
+	BNP level

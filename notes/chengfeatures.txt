@@ -1,0 +1,39 @@
+Predicting Inpatient Acute Kidney Injury over Different Time Horizons: How
+Early and Accurate?
+
+Demographics
+	Age
+	gender
+	race
+
+Vitals
+	BMI
+	diastolic BP
+	systolic BP
+	pulse
+	temperature
+
+Lab tests
+	Albumin
+	ALT
+	AST
+	Ammonia
+	Blood Bilirubin,
+	BUN
+	Ca
+	CK-MB
+	CK
+	Glucose
+	Lipase
+	Platelets
+	Troponin
+	WBC
+
+Comorbidities
+	UHC comorbidity
+
+Admission diagnosis
+	UHC APR-DRG
+
+Medications
+	All medications are mapped to RxNorm ingredient

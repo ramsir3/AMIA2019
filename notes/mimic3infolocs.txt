@@ -1,0 +1,92 @@
+Demographics
+	Age (ADMISSIONS.ADMITTIME-PATIENTS.DOB)
+	gender (PATIENTS.GENDER)
+	race (ADMISSIONS.ETHNICITY)
+
+Comorbidities
+History of surgeries
+13992	225811	CV - past medical history	CV - PMH	metavision	NULL	Adm History/FHPA	NULL	Text	NULL
+13709	225059	Past medical history	PMH	metavision	NULL	Adm History/FHPA	NULL	Text	NULL
+
+Admission diagnosis
+	Current symptoms
+	(ADMISSIONS.DIAGNOSIS)
+
+Radiographic procedures
+	kidney stone
+	decreased kidney size
+
+Vitals - item cat in D_ITEMS routine vital signs
+	BMI
+	diastolic BP
+	systolic BP
+	pulse
+	temperature
+	respiratory rate
+	heart rate
+	pulse pressure index [pulse pressure-to-systolic BP ratio]
+	oxygen saturation
+	mental status
+
+Medications
+	All medications are mapped to RxNorm ingredient
+	History of medications (inc. OTC, prescription, herbal, recreational)
+	Current medications
+		Duration
+		Dosages
+		Frequency
+		Fluid for resuscutation
+
+Lab tests, LABEVENTS
+	Blood
+		Blood urea nitrogen (BUN), 51006
+		Serum creatinine, 50912
+		Glucose, 50809, 50931
+		Albumin, 50862
+		Carbon dioxide/Bicarbonate, 50803, 50882
+		Calcium, 50808, 50893
+		Sodium, 50824, 50983
+		Potassium, 50822, 50971
+		Chloride, 50806, 50902
+		BILIRUBIN DIRECT, 50883
+		BILIRUBIN INDIRECT, 50884
+		BILIRUBIN TOTAL, 50885
+		Total Protein, 50976
+		Alanine Aminotransferase (ALT), 50861
+		Alkaline Phosphatase (ALP), 50863
+		Aspartate Aminotransferase (AST), 50878
+		Hemoglobin, 51212, 50855, 50811, 51222
+		Platelets, 51265
+		White Blood Cell, 51301
+		Ammonia, 50866
+		CK, 50910
+		CK-MB, 50911
+		Lipase, 50956
+		TROPONIN I, 51002
+		TROPONIN T, 51003
+		Anion gap, 50868
+		NTPROBNP, 50963
+		Brain natriuretic peptide, not found
+	Urine
+		everything with FLUID=URINE and LOINC_CODE!=NULL
+		Visual Exam
+		Urinalysis		
+			Acidity (pH)
+			Concentration
+			Protein, 51492, 51102
+			Sugar
+			Ketones
+			Bilirubin
+			Evidence of infection
+			Blood
+			White blood cells
+			Red blood cells
+			Bacteria or yeasts
+			Casts
+			Crystals
+		urinary chemistry
+		urine sediment
+		hematuira
+		rbc casts
+		wbc/wbc casts
+		crystals

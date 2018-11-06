@@ -1,0 +1,73 @@
+Demographics
+	Age
+	gender
+	race
+
+Comorbidities
+
+History of surgeries
+
+Admission diagnosis
+	Current symptoms
+	UHC APR-DRG
+
+Radiographic procedures
+	kidney stone
+	decreased kidney size
+
+Vitals
+	BMI
+	diastolic BP
+	systolic BP
+	pulse
+	temperature
+	respiratory rate
+	heart rate
+	pulse pressure index [pulse pressureto-systolic BP ratio]
+	oxygen saturation
+	mental status
+
+Medications
+	All medications are mapped to RxNorm ingredient
+	History of medications (inc. OTC, prescription, herbal, recreational)
+	Current medications
+		Duration
+		Dosages
+		Frequency
+		Fluid for resuscutation
+
+Lab tests
+	Blood
+		BUN
+		SCr
+		Glucose
+		Albumin
+		Carbon dioxide/Bicarbonate
+		Calcium
+		Sodium
+		Potassium
+		Chloride
+		Total Bilirubin
+		Total Protein
+		Alanine Aminotransferase (ALT)
+		Alkaline Phosphatase (ALP)
+		Aspartate Aminotransferase (AST)
+		Hemoglobin
+		Platelets
+		White Blood Cell
+		Ammonia
+		CK-MB
+		CK
+		Lipase
+		Troponin
+		Anion gap
+		Brain natriuretic peptide
+	Urine
+		proteinuria
+		urinalysis
+		urinary chemistry
+		urine sediment
+		hematuira
+		rbc casts
+		wbc/wbc casts
+		crystals

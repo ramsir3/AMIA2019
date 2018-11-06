@@ -1,0 +1,50 @@
+Acute Kidney Injury
+
+Biomarkers
+
+Risk Factors
+	age
+	problems
+	conditions
+	diseases
+	major surgery
+	albumin/creatine ratio
+	proteinuria
+	gfr
+	hx medications (inc. OTC, prescription, herbal, recreational)
+	current medications
+	fluid for resuscutation
+	sepsis
+	cardiac surgery
+	symptoms
+		vomiting
+		diarrhea
+		fever
+		excessive fluid loss
+	duration of medications
+	frequency of med dosing
+	dosage of medication
+	SCr
+	known infections
+	radiographic procedures
+	exposure to possible infectious sources
+
+Lab
+	serum chemistry
+	CBC
+	urinalysis
+	urinary chemistry
+	urine sediment
+	hematuira
+	rbc casts
+	wbc/wbc casts
+	crystals
+
+radiographs
+	kidney stone
+	decreased kidney size
+
+Organ health
+	generally decreased function
+		esp. lung heart liver
+		mental awareness, seizures

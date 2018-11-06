@@ -1,0 +1,109 @@
+CREATE TABLE FILTERED_LABEVENTS
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`LABEVENTS`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE FILTERED_CHARTEVENTS
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`CHARTEVENTS`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE FILTERED_DIAGNOSES_ICD
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`DIAGNOSES_ICD`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE FILTERED_PRESCRIPTIONS
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`PRESCRIPTIONS`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE FILTERED_INPUTEVENTS_CV
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`INPUTEVENTS_CV`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE FILTERED_INPUTEVENTS_MV
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`INPUTEVENTS_MV`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE FILTERED_OUTPUTEVENTS
+SELECT d.* FROM (
+    (
+        SELECT *
+        FROM ramsandbox.`d_ids`
+    ) i
+    INNER JOIN
+    (
+        SELECT *      
+        FROM mimic3.`OUTPUTEVENTS`
+    ) d
+    ON (i.HADM_ID = d.HADM_ID)
+    AND (i.SUBJECT_ID = d.SUBJECT_ID)
+)
+
+CREATE TABLE COUNT_FILTERED_LABEVENTS
+SELECT `ITEMID`, `SUBJECT_ID`, `HADM_ID`, COUNT(VALUE) as COUNT_VALUES FROM `FILTERED_LABEVENTS`
+GROUP BY `ITEMID`, `SUBJECT_ID`, `HADM_ID`
+ORDER BY COUNT_VALUES, ITEMID DESC
