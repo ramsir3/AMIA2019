@@ -1,0 +1,2236 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Untitled}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{k+kn}{import} \PY{n+nn}{os}\PY{o}{,} \PY{n+nn}{time}
+        \PY{k+kn}{from} \PY{n+nn}{constants} \PY{k}{import} \PY{o}{*}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}34}]:} \PY{n}{headers} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{PROCESSED\PYZus{}PATH}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HOUR\PYZus{}00001.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{delimiter}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{max\PYZus{}rows}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{str}\PY{p}{)}
+         \PY{n}{headers}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}34}]:} array(['SUBJECT\_ID', 'HADM\_ID', 'AGE', 'GENDER', 'TSTAGE', '829', '811',
+                '813', '791', '781', '837', '212', '161', '432', '184', '723',
+                '454', '674', '617', '828', '479', '787', '788', '478', '425',
+                '428', '599', '593', '27', '644', '861', '707', '80', '919', '210',
+                '704', '814', '211', '742', '31', '833', '646', '618', '198', '84',
+                '82', '85', '86', '83', '88', '159', '54', '32', '87', '706',
+                '678', '677', '821', '547', '8480', '156', '8381', '1046', '455',
+                '8441', '128', '456', '637', '926', '550', '1127', '525', '549',
+                '8456', '467', '294', '324', '8400', '663', '77', '917', '1125',
+                '827', '786', '925', '220615', '220602', '225624', '227443',
+                '220645', '227442', '220545', '815', '227073', '824', '227457',
+                '220546', '220621', '220228', '825', '1337', '187', '1087', '154',
+                '220635', '470', '621', '225625', '225677', '527', '220739',
+                '223900', '223901', '220045', '220210', '226512', '220277',
+                '224641', '220047', '220046', '223770', '223769', '224161',
+                '224162', '224168', '226253', '220179', '220180', '220181',
+                '223761', '297', '1535', '1529', '1525', '1162', '1536', '8401',
+                '1523', '1542', '325', '223752', '223751', '227465', '227467',
+                '1425', '72', '227466', '1532', '477', '582', '642', '49',
+                '227688', '762', '229', '526', '8392', '1622', '1623', '1427',
+                '232', '1534', '1522', '581', '763', '680', '807', '1530', '1286',
+                '1533', '226531', '916', '1484', '640', '522', '780', '225103',
+                '777', '8367', '778', '779', '171', '524', '1089', '167', '223834',
+                '1044', '169', '225187', '776', '168', '225185', '5815', '8549',
+                '5820', '8554', '580', '170', '604', '8553', '5819', '225664',
+                '1126', '165', '660', '166', '51', '8368', '52', '190', '5817',
+                '8551', '172', '225184', '230', '283', '127', '225092', '548',
+                '720', '722', '40', '615', '605', '816', '227368', '506', '450',
+                '623', '434', '8467', '585', '218', '226138', '631', '444', '584',
+                '8466', '622', '610', '225094', '223758', '1047', '39', '225313',
+                '733', '535', '682', '619', '614', '578', '235', '683', '8393',
+                '732', '131', '8477', '225668', '238', '657', '219', '8382', '157',
+                '200', '228096', '8388', '203', '543', '818', '223830', '656',
+                '220224', '220235', '224828', '225698', '225118', '8476', '225106',
+                '225087', '784', '227367', '920', '227349', '69', '226137',
+                '225126', '8390', '226179', '225113', '684', '769', '770', '8454',
+                '223835', '773', '226707', '226730', '113', '225067', '221', '772',
+                '225110', '1045', '220644', '220587', '224639', '225690', '284',
+                '225122', '848', '225612', '236', '834', '183', '1531', '225124',
+                '225074', '225667', '411', '398', '225078', '1043', '392', '50',
+                '8428', '220339', '797', '798', '799', '796', '224687', '300',
+                '800', '220293', '223873', '224697', '220292', '223876', '224685',
+                '224695', '223874', '225639', '225640', '225641', '225642',
+                '225643', '8402', '224689', '220056', '220734', '220058', '223875',
+                '114', '225634', '227471', '224690', '226180', '197', '220052',
+                '1703', '224738', '220050', '220051', '225076', '227456', '227292',
+                '226107', '225210', '326', '224688', '224684', '202', '1517',
+                '227429', '226871', '226873', '5813', '8547', '1698', '1521',
+                '8492', '817', '228100', '785', '1538', '224701', '220632',
+                '224686', '226169', '226537', '70', '71', '6208', '224696',
+                '227464', '227565', '227566', '783', '225188', '655', '374',
+                '1479', '386', '227445', '228236', '344', '8416', '6206', '6207',
+                '139', '356', '228099', '775', '651', '652', '225280', '595',
+                '225070', '590', '423', '596', '426', '220227', '1397', '224564',
+                '659', '8478', '806', '545', '795', '228305', '8422', '620',
+                '8474', '410', '220074', '492', '8448', '226534', '8548', '224417',
+                '362', '225133', '225117', '412', '399', '5814', '393', '224700',
+                '116', '8429', '241', '8394', '226540', '95', '94', '626', '96',
+                '97', '8373', '244', '1480', '122', '220073', '227293', '220072',
+                '679', '676', '627', '226536', '352', '226113', '90', '662',
+                '227468', '225091', '1528', '225129', '625', '8488', '731', '421',
+                '430', '8485', '422', '431', '338', '226185', '224422', '224421',
+                '225175', '225086', '225189', '137', '648', '208', '446', '130',
+                '158', '516', '823', '228137', '515', '1483', '643', '466', '860',
+                '417', '8437', '705', '518', '439', '227369', '227366', '225206',
+                '226139', '645', '8475', '226136', '225672', '517', '855',
+                '220274', '225112', '413', '400', '519', '521', '394', '7914',
+                '8430', '285', '7915', '123', '225105', '242', '661', '56',
+                '225638', '8369', '468', '89', '822', '857', '375', '472', '473',
+                '471', '345', '43', '220581', '47', '357', '58', '717', '387',
+                '45', '8417', '8371', '927', '1391', '465', '8482', '227287',
+                '8552', '76', '224923', '225637', '227358', '5818', '141', '8406',
+                '1704', '226115', '223872', '303', '8403', '327', '136', '1401',
+                '363', '1390', '591', '1402', '8468', '850', '388', '8365', '8418',
+                '121', '8378', '616', '227801', '225674', '353', '227454',
+                '227455', '491', '664', '629', '1481', '424', '8435', '1063',
+                '228098', '227810', '436', '225082', '220061', '339', '228101',
+                '226473', '138', '224169', '530', '224562', '220066', '225085',
+                '220063', '220059', '220060', '368', '8438', '224751', '223962',
+                '440', '8423', '224846', '227350', '135', '8380', '224839',
+                '226846', '8410', '1695', '227809', '50912', '51006', '51221',
+                '51265', '51301', '51222', '51249', '51248', '51250', '51279',
+                '51277', '50971', '50983', '50902', '50882', '50868', '50931',
+                '50960', '50970', '50893', '51237', '51274', '51275', '50820',
+                '51491', '51498', '51244', '51254', '51256', '51146', '51200',
+                '50802', '50804', '50821', '50818', '50813', '50861', '50878',
+                '51492', '50885', '50863', '51484', '51514', '51478', '50862',
+                '51508', '51506', '51466', '51464', '51487', '51519', '51516',
+                '51493', '51486', '51476', '50822', '50808', '50910', '50809',
+                '50911', '50800', '51463', '50954', '50810', '50811', '50824',
+                '50817', '50812', '50956', '51003', '50806', '50825', '50816',
+                '50867', '51144', '51214', '50826', '51087', '50828', '50920',
+                '51233', '51082', '51246', '50819', '51143', '51251', '51255',
+                '51137', '51252', '51100', '51267', '50827', '50993', '51266',
+                '51009', '51268', '51093', '50823', '50801', '50933', '51000',
+                '50952', '51482', '50998', '50953', '50924', '50880', '50879',
+                '50999', '50887', '50979', '51104', '50815', '51512', '50908',
+                '50803', '50852', '50907', '51079', '51075', '51071', '51074',
+                '51092', '51090', '51097', '50904', '50903', '50935', '51010',
+                '50922', '50905', '51078', '50856', '50909', '50883', '50981',
+                '51523', '50884', '50964', '51283', '50925', '51260', '51462',
+                '51479', '50967', '50919', '50963', '50976', '51007', '51501',
+                '51002', '50995', '51288', '51257', '51102', '51213', '51151',
+                '51287', '50889', '50917', 'STAGE'], dtype='<U10')
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{PROCESSED\PYZus{}PATH}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HOUR\PYZus{}00001.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{delimiter}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{skip\PYZus{}header}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}33}]:} array([        nan,         nan,         nan,         nan,         nan,
+                8.29000e+02, 8.11000e+02, 8.13000e+02, 7.91000e+02, 7.81000e+02,
+                8.37000e+02, 2.12000e+02, 1.61000e+02, 4.32000e+02, 1.84000e+02,
+                7.23000e+02, 4.54000e+02, 6.74000e+02, 6.17000e+02, 8.28000e+02,
+                4.79000e+02, 7.87000e+02, 7.88000e+02, 4.78000e+02, 4.25000e+02,
+                4.28000e+02, 5.99000e+02, 5.93000e+02, 2.70000e+01, 6.44000e+02,
+                8.61000e+02, 7.07000e+02, 8.00000e+01, 9.19000e+02, 2.10000e+02,
+                7.04000e+02, 8.14000e+02, 2.11000e+02, 7.42000e+02, 3.10000e+01,
+                8.33000e+02, 6.46000e+02, 6.18000e+02, 1.98000e+02, 8.40000e+01,
+                8.20000e+01, 8.50000e+01, 8.60000e+01, 8.30000e+01, 8.80000e+01,
+                1.59000e+02, 5.40000e+01, 3.20000e+01, 8.70000e+01, 7.06000e+02,
+                6.78000e+02, 6.77000e+02, 8.21000e+02, 5.47000e+02, 8.48000e+03,
+                1.56000e+02, 8.38100e+03, 1.04600e+03, 4.55000e+02, 8.44100e+03,
+                1.28000e+02, 4.56000e+02, 6.37000e+02, 9.26000e+02, 5.50000e+02,
+                1.12700e+03, 5.25000e+02, 5.49000e+02, 8.45600e+03, 4.67000e+02,
+                2.94000e+02, 3.24000e+02, 8.40000e+03, 6.63000e+02, 7.70000e+01,
+                9.17000e+02, 1.12500e+03, 8.27000e+02, 7.86000e+02, 9.25000e+02,
+                2.20615e+05, 2.20602e+05, 2.25624e+05, 2.27443e+05, 2.20645e+05,
+                2.27442e+05, 2.20545e+05, 8.15000e+02, 2.27073e+05, 8.24000e+02,
+                2.27457e+05, 2.20546e+05, 2.20621e+05, 2.20228e+05, 8.25000e+02,
+                1.33700e+03, 1.87000e+02, 1.08700e+03, 1.54000e+02, 2.20635e+05,
+                4.70000e+02, 6.21000e+02, 2.25625e+05, 2.25677e+05, 5.27000e+02,
+                2.20739e+05, 2.23900e+05, 2.23901e+05, 2.20045e+05, 2.20210e+05,
+                2.26512e+05, 2.20277e+05, 2.24641e+05, 2.20047e+05, 2.20046e+05,
+                2.23770e+05, 2.23769e+05, 2.24161e+05, 2.24162e+05, 2.24168e+05,
+                2.26253e+05, 2.20179e+05, 2.20180e+05, 2.20181e+05, 2.23761e+05,
+                2.97000e+02, 1.53500e+03, 1.52900e+03, 1.52500e+03, 1.16200e+03,
+                1.53600e+03, 8.40100e+03, 1.52300e+03, 1.54200e+03, 3.25000e+02,
+                2.23752e+05, 2.23751e+05, 2.27465e+05, 2.27467e+05, 1.42500e+03,
+                7.20000e+01, 2.27466e+05, 1.53200e+03, 4.77000e+02, 5.82000e+02,
+                6.42000e+02, 4.90000e+01, 2.27688e+05, 7.62000e+02, 2.29000e+02,
+                5.26000e+02, 8.39200e+03, 1.62200e+03, 1.62300e+03, 1.42700e+03,
+                2.32000e+02, 1.53400e+03, 1.52200e+03, 5.81000e+02, 7.63000e+02,
+                6.80000e+02, 8.07000e+02, 1.53000e+03, 1.28600e+03, 1.53300e+03,
+                2.26531e+05, 9.16000e+02, 1.48400e+03, 6.40000e+02, 5.22000e+02,
+                7.80000e+02, 2.25103e+05, 7.77000e+02, 8.36700e+03, 7.78000e+02,
+                7.79000e+02, 1.71000e+02, 5.24000e+02, 1.08900e+03, 1.67000e+02,
+                2.23834e+05, 1.04400e+03, 1.69000e+02, 2.25187e+05, 7.76000e+02,
+                1.68000e+02, 2.25185e+05, 5.81500e+03, 8.54900e+03, 5.82000e+03,
+                8.55400e+03, 5.80000e+02, 1.70000e+02, 6.04000e+02, 8.55300e+03,
+                5.81900e+03, 2.25664e+05, 1.12600e+03, 1.65000e+02, 6.60000e+02,
+                1.66000e+02, 5.10000e+01, 8.36800e+03, 5.20000e+01, 1.90000e+02,
+                5.81700e+03, 8.55100e+03, 1.72000e+02, 2.25184e+05, 2.30000e+02,
+                2.83000e+02, 1.27000e+02, 2.25092e+05, 5.48000e+02, 7.20000e+02,
+                7.22000e+02, 4.00000e+01, 6.15000e+02, 6.05000e+02, 8.16000e+02,
+                2.27368e+05, 5.06000e+02, 4.50000e+02, 6.23000e+02, 4.34000e+02,
+                8.46700e+03, 5.85000e+02, 2.18000e+02, 2.26138e+05, 6.31000e+02,
+                4.44000e+02, 5.84000e+02, 8.46600e+03, 6.22000e+02, 6.10000e+02,
+                2.25094e+05, 2.23758e+05, 1.04700e+03, 3.90000e+01, 2.25313e+05,
+                7.33000e+02, 5.35000e+02, 6.82000e+02, 6.19000e+02, 6.14000e+02,
+                5.78000e+02, 2.35000e+02, 6.83000e+02, 8.39300e+03, 7.32000e+02,
+                1.31000e+02, 8.47700e+03, 2.25668e+05, 2.38000e+02, 6.57000e+02,
+                2.19000e+02, 8.38200e+03, 1.57000e+02, 2.00000e+02, 2.28096e+05,
+                8.38800e+03, 2.03000e+02, 5.43000e+02, 8.18000e+02, 2.23830e+05,
+                6.56000e+02, 2.20224e+05, 2.20235e+05, 2.24828e+05, 2.25698e+05,
+                2.25118e+05, 8.47600e+03, 2.25106e+05, 2.25087e+05, 7.84000e+02,
+                2.27367e+05, 9.20000e+02, 2.27349e+05, 6.90000e+01, 2.26137e+05,
+                2.25126e+05, 8.39000e+03, 2.26179e+05, 2.25113e+05, 6.84000e+02,
+                7.69000e+02, 7.70000e+02, 8.45400e+03, 2.23835e+05, 7.73000e+02,
+                2.26707e+05, 2.26730e+05, 1.13000e+02, 2.25067e+05, 2.21000e+02,
+                7.72000e+02, 2.25110e+05, 1.04500e+03, 2.20644e+05, 2.20587e+05,
+                2.24639e+05, 2.25690e+05, 2.84000e+02, 2.25122e+05, 8.48000e+02,
+                2.25612e+05, 2.36000e+02, 8.34000e+02, 1.83000e+02, 1.53100e+03,
+                2.25124e+05, 2.25074e+05, 2.25667e+05, 4.11000e+02, 3.98000e+02,
+                2.25078e+05, 1.04300e+03, 3.92000e+02, 5.00000e+01, 8.42800e+03,
+                2.20339e+05, 7.97000e+02, 7.98000e+02, 7.99000e+02, 7.96000e+02,
+                2.24687e+05, 3.00000e+02, 8.00000e+02, 2.20293e+05, 2.23873e+05,
+                2.24697e+05, 2.20292e+05, 2.23876e+05, 2.24685e+05, 2.24695e+05,
+                2.23874e+05, 2.25639e+05, 2.25640e+05, 2.25641e+05, 2.25642e+05,
+                2.25643e+05, 8.40200e+03, 2.24689e+05, 2.20056e+05, 2.20734e+05,
+                2.20058e+05, 2.23875e+05, 1.14000e+02, 2.25634e+05, 2.27471e+05,
+                2.24690e+05, 2.26180e+05, 1.97000e+02, 2.20052e+05, 1.70300e+03,
+                2.24738e+05, 2.20050e+05, 2.20051e+05, 2.25076e+05, 2.27456e+05,
+                2.27292e+05, 2.26107e+05, 2.25210e+05, 3.26000e+02, 2.24688e+05,
+                2.24684e+05, 2.02000e+02, 1.51700e+03, 2.27429e+05, 2.26871e+05,
+                2.26873e+05, 5.81300e+03, 8.54700e+03, 1.69800e+03, 1.52100e+03,
+                8.49200e+03, 8.17000e+02, 2.28100e+05, 7.85000e+02, 1.53800e+03,
+                2.24701e+05, 2.20632e+05, 2.24686e+05, 2.26169e+05, 2.26537e+05,
+                7.00000e+01, 7.10000e+01, 6.20800e+03, 2.24696e+05, 2.27464e+05,
+                2.27565e+05, 2.27566e+05, 7.83000e+02, 2.25188e+05, 6.55000e+02,
+                3.74000e+02, 1.47900e+03, 3.86000e+02, 2.27445e+05, 2.28236e+05,
+                3.44000e+02, 8.41600e+03, 6.20600e+03, 6.20700e+03, 1.39000e+02,
+                3.56000e+02, 2.28099e+05, 7.75000e+02, 6.51000e+02, 6.52000e+02,
+                2.25280e+05, 5.95000e+02, 2.25070e+05, 5.90000e+02, 4.23000e+02,
+                5.96000e+02, 4.26000e+02, 2.20227e+05, 1.39700e+03, 2.24564e+05,
+                6.59000e+02, 8.47800e+03, 8.06000e+02, 5.45000e+02, 7.95000e+02,
+                2.28305e+05, 8.42200e+03, 6.20000e+02, 8.47400e+03, 4.10000e+02,
+                2.20074e+05, 4.92000e+02, 8.44800e+03, 2.26534e+05, 8.54800e+03,
+                2.24417e+05, 3.62000e+02, 2.25133e+05, 2.25117e+05, 4.12000e+02,
+                3.99000e+02, 5.81400e+03, 3.93000e+02, 2.24700e+05, 1.16000e+02,
+                8.42900e+03, 2.41000e+02, 8.39400e+03, 2.26540e+05, 9.50000e+01,
+                9.40000e+01, 6.26000e+02, 9.60000e+01, 9.70000e+01, 8.37300e+03,
+                2.44000e+02, 1.48000e+03, 1.22000e+02, 2.20073e+05, 2.27293e+05,
+                2.20072e+05, 6.79000e+02, 6.76000e+02, 6.27000e+02, 2.26536e+05,
+                3.52000e+02, 2.26113e+05, 9.00000e+01, 6.62000e+02, 2.27468e+05,
+                2.25091e+05, 1.52800e+03, 2.25129e+05, 6.25000e+02, 8.48800e+03,
+                7.31000e+02, 4.21000e+02, 4.30000e+02, 8.48500e+03, 4.22000e+02,
+                4.31000e+02, 3.38000e+02, 2.26185e+05, 2.24422e+05, 2.24421e+05,
+                2.25175e+05, 2.25086e+05, 2.25189e+05, 1.37000e+02, 6.48000e+02,
+                2.08000e+02, 4.46000e+02, 1.30000e+02, 1.58000e+02, 5.16000e+02,
+                8.23000e+02, 2.28137e+05, 5.15000e+02, 1.48300e+03, 6.43000e+02,
+                4.66000e+02, 8.60000e+02, 4.17000e+02, 8.43700e+03, 7.05000e+02,
+                5.18000e+02, 4.39000e+02, 2.27369e+05, 2.27366e+05, 2.25206e+05,
+                2.26139e+05, 6.45000e+02, 8.47500e+03, 2.26136e+05, 2.25672e+05,
+                5.17000e+02, 8.55000e+02, 2.20274e+05, 2.25112e+05, 4.13000e+02,
+                4.00000e+02, 5.19000e+02, 5.21000e+02, 3.94000e+02, 7.91400e+03,
+                8.43000e+03, 2.85000e+02, 7.91500e+03, 1.23000e+02, 2.25105e+05,
+                2.42000e+02, 6.61000e+02, 5.60000e+01, 2.25638e+05, 8.36900e+03,
+                4.68000e+02, 8.90000e+01, 8.22000e+02, 8.57000e+02, 3.75000e+02,
+                4.72000e+02, 4.73000e+02, 4.71000e+02, 3.45000e+02, 4.30000e+01,
+                2.20581e+05, 4.70000e+01, 3.57000e+02, 5.80000e+01, 7.17000e+02,
+                3.87000e+02, 4.50000e+01, 8.41700e+03, 8.37100e+03, 9.27000e+02,
+                1.39100e+03, 4.65000e+02, 8.48200e+03, 2.27287e+05, 8.55200e+03,
+                7.60000e+01, 2.24923e+05, 2.25637e+05, 2.27358e+05, 5.81800e+03,
+                1.41000e+02, 8.40600e+03, 1.70400e+03, 2.26115e+05, 2.23872e+05,
+                3.03000e+02, 8.40300e+03, 3.27000e+02, 1.36000e+02, 1.40100e+03,
+                3.63000e+02, 1.39000e+03, 5.91000e+02, 1.40200e+03, 8.46800e+03,
+                8.50000e+02, 3.88000e+02, 8.36500e+03, 8.41800e+03, 1.21000e+02,
+                8.37800e+03, 6.16000e+02, 2.27801e+05, 2.25674e+05, 3.53000e+02,
+                2.27454e+05, 2.27455e+05, 4.91000e+02, 6.64000e+02, 6.29000e+02,
+                1.48100e+03, 4.24000e+02, 8.43500e+03, 1.06300e+03, 2.28098e+05,
+                2.27810e+05, 4.36000e+02, 2.25082e+05, 2.20061e+05, 3.39000e+02,
+                2.28101e+05, 2.26473e+05, 1.38000e+02, 2.24169e+05, 5.30000e+02,
+                2.24562e+05, 2.20066e+05, 2.25085e+05, 2.20063e+05, 2.20059e+05,
+                2.20060e+05, 3.68000e+02, 8.43800e+03, 2.24751e+05, 2.23962e+05,
+                4.40000e+02, 8.42300e+03, 2.24846e+05, 2.27350e+05, 1.35000e+02,
+                8.38000e+03, 2.24839e+05, 2.26846e+05, 8.41000e+03, 1.69500e+03,
+                2.27809e+05, 5.09120e+04, 5.10060e+04, 5.12210e+04, 5.12650e+04,
+                5.13010e+04, 5.12220e+04, 5.12490e+04, 5.12480e+04, 5.12500e+04,
+                5.12790e+04, 5.12770e+04, 5.09710e+04, 5.09830e+04, 5.09020e+04,
+                5.08820e+04, 5.08680e+04, 5.09310e+04, 5.09600e+04, 5.09700e+04,
+                5.08930e+04, 5.12370e+04, 5.12740e+04, 5.12750e+04, 5.08200e+04,
+                5.14910e+04, 5.14980e+04, 5.12440e+04, 5.12540e+04, 5.12560e+04,
+                5.11460e+04, 5.12000e+04, 5.08020e+04, 5.08040e+04, 5.08210e+04,
+                5.08180e+04, 5.08130e+04, 5.08610e+04, 5.08780e+04, 5.14920e+04,
+                5.08850e+04, 5.08630e+04, 5.14840e+04, 5.15140e+04, 5.14780e+04,
+                5.08620e+04, 5.15080e+04, 5.15060e+04, 5.14660e+04, 5.14640e+04,
+                5.14870e+04, 5.15190e+04, 5.15160e+04, 5.14930e+04, 5.14860e+04,
+                5.14760e+04, 5.08220e+04, 5.08080e+04, 5.09100e+04, 5.08090e+04,
+                5.09110e+04, 5.08000e+04, 5.14630e+04, 5.09540e+04, 5.08100e+04,
+                5.08110e+04, 5.08240e+04, 5.08170e+04, 5.08120e+04, 5.09560e+04,
+                5.10030e+04, 5.08060e+04, 5.08250e+04, 5.08160e+04, 5.08670e+04,
+                5.11440e+04, 5.12140e+04, 5.08260e+04, 5.10870e+04, 5.08280e+04,
+                5.09200e+04, 5.12330e+04, 5.10820e+04, 5.12460e+04, 5.08190e+04,
+                5.11430e+04, 5.12510e+04, 5.12550e+04, 5.11370e+04, 5.12520e+04,
+                5.11000e+04, 5.12670e+04, 5.08270e+04, 5.09930e+04, 5.12660e+04,
+                5.10090e+04, 5.12680e+04, 5.10930e+04, 5.08230e+04, 5.08010e+04,
+                5.09330e+04, 5.10000e+04, 5.09520e+04, 5.14820e+04, 5.09980e+04,
+                5.09530e+04, 5.09240e+04, 5.08800e+04, 5.08790e+04, 5.09990e+04,
+                5.08870e+04, 5.09790e+04, 5.11040e+04, 5.08150e+04, 5.15120e+04,
+                5.09080e+04, 5.08030e+04, 5.08520e+04, 5.09070e+04, 5.10790e+04,
+                5.10750e+04, 5.10710e+04, 5.10740e+04, 5.10920e+04, 5.10900e+04,
+                5.10970e+04, 5.09040e+04, 5.09030e+04, 5.09350e+04, 5.10100e+04,
+                5.09220e+04, 5.09050e+04, 5.10780e+04, 5.08560e+04, 5.09090e+04,
+                5.08830e+04, 5.09810e+04, 5.15230e+04, 5.08840e+04, 5.09640e+04,
+                5.12830e+04, 5.09250e+04, 5.12600e+04, 5.14620e+04, 5.14790e+04,
+                5.09670e+04, 5.09190e+04, 5.09630e+04, 5.09760e+04, 5.10070e+04,
+                5.15010e+04, 5.10020e+04, 5.09950e+04, 5.12880e+04, 5.12570e+04,
+                5.11020e+04, 5.12130e+04, 5.11510e+04, 5.12870e+04, 5.08890e+04,
+                5.09170e+04,         nan])
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{n}{subject\PYZus{}hadm\PYZus{}ids} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{]}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{subject\PYZus{}hadm\PYZus{}ids}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+         
+         \PY{n}{x} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         
+         \PY{n}{y} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} y}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(47442, 2)
+(47442, 792)
+[[ 1.          1.          4.04000001 {\ldots}         nan         nan
+          nan]
+ [ 0.          0.                 nan {\ldots}         nan         nan
+          nan]
+ [ 0.          9.                 nan {\ldots}         nan         nan
+          nan]
+ {\ldots}
+ [ 0.          0.                 nan {\ldots}         nan         nan
+          nan]
+ [ 0.          0.                 nan {\ldots}         nan         nan
+          nan]
+ [ 0.         27.                 nan {\ldots}         nan         nan
+          nan]]
+(47442,)
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}55}]:} \PY{n}{row} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         \PY{n}{num\PYZus{}nan} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{isnan}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{n}{row}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{row:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{row}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{num\PYZus{}nan:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{num\PYZus{}nan}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{num\PYZus{}nan}\PY{o}{/}\PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{col: }\PY{l+s+si}{\PYZpc{}03d}\PY{l+s+s2}{ \PYZhy{} }\PY{l+s+si}{\PYZpc{} 10s}\PY{l+s+s2}{ | }\PY{l+s+si}{\PYZpc{}.6f}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{headers}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{data}\PY{p}{[}\PY{n}{row}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+row: 8640 num\_nan: 778 (0.976)
+col: 000 - SUBJECT\_ID | 9637.000000
+col: 001 -    HADM\_ID | 110835.000000
+col: 002 -        AGE | 61.000000
+col: 003 -     GENDER | 0.000000
+col: 004 -     TSTAGE | 0.000000
+col: 005 -        829 | nan
+col: 006 -        811 | nan
+col: 007 -        813 | nan
+col: 008 -        791 | nan
+col: 009 -        781 | nan
+col: 010 -        837 | nan
+col: 011 -        212 | nan
+col: 012 -        161 | nan
+col: 013 -        432 | nan
+col: 014 -        184 | nan
+col: 015 -        723 | nan
+col: 016 -        454 | nan
+col: 017 -        674 | nan
+col: 018 -        617 | nan
+col: 019 -        828 | nan
+col: 020 -        479 | nan
+col: 021 -        787 | nan
+col: 022 -        788 | nan
+col: 023 -        478 | nan
+col: 024 -        425 | nan
+col: 025 -        428 | nan
+col: 026 -        599 | nan
+col: 027 -        593 | nan
+col: 028 -         27 | nan
+col: 029 -        644 | nan
+col: 030 -        861 | nan
+col: 031 -        707 | nan
+col: 032 -         80 | nan
+col: 033 -        919 | nan
+col: 034 -        210 | nan
+col: 035 -        704 | nan
+col: 036 -        814 | nan
+col: 037 -        211 | 77.000000
+col: 038 -        742 | 1.000000
+col: 039 -         31 | nan
+col: 040 -        833 | nan
+col: 041 -        646 | 100.000000
+col: 042 -        618 | 16.000000
+col: 043 -        198 | nan
+col: 044 -         84 | nan
+col: 045 -         82 | nan
+col: 046 -         85 | nan
+col: 047 -         86 | nan
+col: 048 -         83 | nan
+col: 049 -         88 | nan
+col: 050 -        159 | nan
+col: 051 -         54 | nan
+col: 052 -         32 | nan
+col: 053 -         87 | 16.000000
+col: 054 -        706 | nan
+col: 055 -        678 | 96.099998
+col: 056 -        677 | 35.611099
+col: 057 -        821 | nan
+col: 058 -        547 | nan
+col: 059 -       8480 | nan
+col: 060 -        156 | nan
+col: 061 -       8381 | nan
+col: 062 -       1046 | nan
+col: 063 -        455 | nan
+col: 064 -       8441 | nan
+col: 065 -        128 | nan
+col: 066 -        456 | nan
+col: 067 -        637 | nan
+col: 068 -        926 | nan
+col: 069 -        550 | nan
+col: 070 -       1127 | nan
+col: 071 -        525 | nan
+col: 072 -        549 | nan
+col: 073 -       8456 | nan
+col: 074 -        467 | nan
+col: 075 -        294 | nan
+col: 076 -        324 | nan
+col: 077 -       8400 | nan
+col: 078 -        663 | nan
+col: 079 -         77 | nan
+col: 080 -        917 | nan
+col: 081 -       1125 | nan
+col: 082 -        827 | nan
+col: 083 -        786 | nan
+col: 084 -        925 | nan
+col: 085 -     220615 | nan
+col: 086 -     220602 | nan
+col: 087 -     225624 | nan
+col: 088 -     227443 | nan
+col: 089 -     220645 | nan
+col: 090 -     227442 | nan
+col: 091 -     220545 | nan
+col: 092 -        815 | nan
+col: 093 -     227073 | nan
+col: 094 -        824 | nan
+col: 095 -     227457 | nan
+col: 096 -     220546 | nan
+col: 097 -     220621 | nan
+col: 098 -     220228 | nan
+col: 099 -        825 | nan
+col: 100 -       1337 | nan
+col: 101 -        187 | nan
+col: 102 -       1087 | nan
+col: 103 -        154 | nan
+col: 104 -     220635 | nan
+col: 105 -        470 | nan
+col: 106 -        621 | nan
+col: 107 -     225625 | nan
+col: 108 -     225677 | nan
+col: 109 -        527 | nan
+col: 110 -     220739 | nan
+col: 111 -     223900 | nan
+col: 112 -     223901 | nan
+col: 113 -     220045 | nan
+col: 114 -     220210 | nan
+col: 115 -     226512 | nan
+col: 116 -     220277 | nan
+col: 117 -     224641 | nan
+col: 118 -     220047 | nan
+col: 119 -     220046 | nan
+col: 120 -     223770 | nan
+col: 121 -     223769 | nan
+col: 122 -     224161 | nan
+col: 123 -     224162 | nan
+col: 124 -     224168 | nan
+col: 125 -     226253 | nan
+col: 126 -     220179 | nan
+col: 127 -     220180 | nan
+col: 128 -     220181 | nan
+col: 129 -     223761 | nan
+col: 130 -        297 | nan
+col: 131 -       1535 | nan
+col: 132 -       1529 | nan
+col: 133 -       1525 | nan
+col: 134 -       1162 | nan
+col: 135 -       1536 | nan
+col: 136 -       8401 | nan
+col: 137 -       1523 | nan
+col: 138 -       1542 | nan
+col: 139 -        325 | nan
+col: 140 -     223752 | nan
+col: 141 -     223751 | nan
+col: 142 -     227465 | nan
+col: 143 -     227467 | nan
+col: 144 -       1425 | nan
+col: 145 -         72 | nan
+col: 146 -     227466 | nan
+col: 147 -       1532 | nan
+col: 148 -        477 | nan
+col: 149 -        582 | nan
+col: 150 -        642 | nan
+col: 151 -         49 | nan
+col: 152 -     227688 | nan
+col: 153 -        762 | 63.500000
+col: 154 -        229 | nan
+col: 155 -        526 | nan
+col: 156 -       8392 | nan
+col: 157 -       1622 | nan
+col: 158 -       1623 | nan
+col: 159 -       1427 | nan
+col: 160 -        232 | nan
+col: 161 -       1534 | nan
+col: 162 -       1522 | nan
+col: 163 -        581 | nan
+col: 164 -        763 | nan
+col: 165 -        680 | nan
+col: 166 -        807 | nan
+col: 167 -       1530 | nan
+col: 168 -       1286 | nan
+col: 169 -       1533 | nan
+col: 170 -     226531 | nan
+col: 171 -        916 | nan
+col: 172 -       1484 | nan
+col: 173 -        640 | nan
+col: 174 -        522 | nan
+col: 175 -        780 | nan
+col: 176 -     225103 | nan
+col: 177 -        777 | nan
+col: 178 -       8367 | nan
+col: 179 -        778 | nan
+col: 180 -        779 | nan
+col: 181 -        171 | nan
+col: 182 -        524 | nan
+col: 183 -       1089 | nan
+col: 184 -        167 | nan
+col: 185 -     223834 | nan
+col: 186 -       1044 | nan
+col: 187 -        169 | nan
+col: 188 -     225187 | nan
+col: 189 -        776 | nan
+col: 190 -        168 | nan
+col: 191 -     225185 | nan
+col: 192 -       5815 | nan
+col: 193 -       8549 | nan
+col: 194 -       5820 | nan
+col: 195 -       8554 | nan
+col: 196 -        580 | nan
+col: 197 -        170 | nan
+col: 198 -        604 | nan
+col: 199 -       8553 | nan
+col: 200 -       5819 | nan
+col: 201 -     225664 | nan
+col: 202 -       1126 | nan
+col: 203 -        165 | nan
+col: 204 -        660 | nan
+col: 205 -        166 | nan
+col: 206 -         51 | 117.000000
+col: 207 -       8368 | 67.000000
+col: 208 -         52 | 89.000000
+col: 209 -        190 | nan
+col: 210 -       5817 | nan
+col: 211 -       8551 | nan
+col: 212 -        172 | nan
+col: 213 -     225184 | nan
+col: 214 -        230 | nan
+col: 215 -        283 | nan
+col: 216 -        127 | nan
+col: 217 -     225092 | nan
+col: 218 -        548 | nan
+col: 219 -        720 | nan
+col: 220 -        722 | nan
+col: 221 -         40 | nan
+col: 222 -        615 | nan
+col: 223 -        605 | nan
+col: 224 -        816 | nan
+col: 225 -     227368 | nan
+col: 226 -        506 | nan
+col: 227 -        450 | nan
+col: 228 -        623 | nan
+col: 229 -        434 | nan
+col: 230 -       8467 | nan
+col: 231 -        585 | nan
+col: 232 -        218 | nan
+col: 233 -     226138 | nan
+col: 234 -        631 | nan
+col: 235 -        444 | nan
+col: 236 -        584 | nan
+col: 237 -       8466 | nan
+col: 238 -        622 | nan
+col: 239 -        610 | nan
+col: 240 -     225094 | nan
+col: 241 -     223758 | nan
+col: 242 -       1047 | nan
+col: 243 -         39 | nan
+col: 244 -     225313 | nan
+col: 245 -        733 | nan
+col: 246 -        535 | nan
+col: 247 -        682 | nan
+col: 248 -        619 | nan
+col: 249 -        614 | nan
+col: 250 -        578 | nan
+col: 251 -        235 | nan
+col: 252 -        683 | nan
+col: 253 -       8393 | nan
+col: 254 -        732 | nan
+col: 255 -        131 | nan
+col: 256 -       8477 | nan
+col: 257 -     225668 | nan
+col: 258 -        238 | nan
+col: 259 -        657 | nan
+col: 260 -        219 | nan
+col: 261 -       8382 | nan
+col: 262 -        157 | nan
+col: 263 -        200 | nan
+col: 264 -     228096 | nan
+col: 265 -       8388 | nan
+col: 266 -        203 | nan
+col: 267 -        543 | nan
+col: 268 -        818 | nan
+col: 269 -     223830 | nan
+col: 270 -        656 | nan
+col: 271 -     220224 | nan
+col: 272 -     220235 | nan
+col: 273 -     224828 | nan
+col: 274 -     225698 | nan
+col: 275 -     225118 | nan
+col: 276 -       8476 | nan
+col: 277 -     225106 | nan
+col: 278 -     225087 | nan
+col: 279 -        784 | nan
+col: 280 -     227367 | nan
+col: 281 -        920 | 62.000000
+col: 282 -     227349 | nan
+col: 283 -         69 | 1.699950
+col: 284 -     226137 | nan
+col: 285 -     225126 | nan
+col: 286 -       8390 | nan
+col: 287 -     226179 | nan
+col: 288 -     225113 | nan
+col: 289 -        684 | nan
+col: 290 -        769 | nan
+col: 291 -        770 | nan
+col: 292 -       8454 | nan
+col: 293 -     223835 | nan
+col: 294 -        773 | nan
+col: 295 -     226707 | nan
+col: 296 -     226730 | nan
+col: 297 -        113 | nan
+col: 298 -     225067 | nan
+col: 299 -        221 | nan
+col: 300 -        772 | nan
+col: 301 -     225110 | nan
+col: 302 -       1045 | nan
+col: 303 -     220644 | nan
+col: 304 -     220587 | nan
+col: 305 -     224639 | nan
+col: 306 -     225690 | nan
+col: 307 -        284 | nan
+col: 308 -     225122 | nan
+col: 309 -        848 | nan
+col: 310 -     225612 | nan
+col: 311 -        236 | nan
+col: 312 -        834 | nan
+col: 313 -        183 | nan
+col: 314 -       1531 | nan
+col: 315 -     225124 | nan
+col: 316 -     225074 | nan
+col: 317 -     225667 | nan
+col: 318 -        411 | nan
+col: 319 -        398 | nan
+col: 320 -     225078 | nan
+col: 321 -       1043 | nan
+col: 322 -        392 | nan
+col: 323 -         50 | nan
+col: 324 -       8428 | nan
+col: 325 -     220339 | nan
+col: 326 -        797 | nan
+col: 327 -        798 | nan
+col: 328 -        799 | nan
+col: 329 -        796 | nan
+col: 330 -     224687 | nan
+col: 331 -        300 | nan
+col: 332 -        800 | nan
+col: 333 -     220293 | nan
+col: 334 -     223873 | nan
+col: 335 -     224697 | nan
+col: 336 -     220292 | nan
+col: 337 -     223876 | nan
+col: 338 -     224685 | nan
+col: 339 -     224695 | nan
+col: 340 -     223874 | nan
+col: 341 -     225639 | nan
+col: 342 -     225640 | nan
+col: 343 -     225641 | nan
+col: 344 -     225642 | nan
+col: 345 -     225643 | nan
+col: 346 -       8402 | nan
+col: 347 -     224689 | nan
+col: 348 -     220056 | nan
+col: 349 -     220734 | nan
+col: 350 -     220058 | nan
+col: 351 -     223875 | nan
+col: 352 -        114 | nan
+col: 353 -     225634 | nan
+col: 354 -     227471 | nan
+col: 355 -     224690 | nan
+col: 356 -     226180 | nan
+col: 357 -        197 | nan
+col: 358 -     220052 | nan
+col: 359 -       1703 | nan
+col: 360 -     224738 | nan
+col: 361 -     220050 | nan
+col: 362 -     220051 | nan
+col: 363 -     225076 | nan
+col: 364 -     227456 | nan
+col: 365 -     227292 | nan
+col: 366 -     226107 | nan
+col: 367 -     225210 | nan
+col: 368 -        326 | nan
+col: 369 -     224688 | nan
+col: 370 -     224684 | nan
+col: 371 -        202 | nan
+col: 372 -       1517 | nan
+col: 373 -     227429 | nan
+col: 374 -     226871 | nan
+col: 375 -     226873 | nan
+col: 376 -       5813 | nan
+col: 377 -       8547 | nan
+col: 378 -       1698 | nan
+col: 379 -       1521 | nan
+col: 380 -       8492 | nan
+col: 381 -        817 | nan
+col: 382 -     228100 | nan
+col: 383 -        785 | nan
+col: 384 -       1538 | nan
+col: 385 -     224701 | nan
+col: 386 -     220632 | nan
+col: 387 -     224686 | nan
+col: 388 -     226169 | nan
+col: 389 -     226537 | nan
+col: 390 -         70 | nan
+col: 391 -         71 | nan
+col: 392 -       6208 | nan
+col: 393 -     224696 | nan
+col: 394 -     227464 | nan
+col: 395 -     227565 | nan
+col: 396 -     227566 | nan
+col: 397 -        783 | nan
+col: 398 -     225188 | nan
+col: 399 -        655 | nan
+col: 400 -        374 | nan
+col: 401 -       1479 | nan
+col: 402 -        386 | nan
+col: 403 -     227445 | nan
+col: 404 -     228236 | nan
+col: 405 -        344 | nan
+col: 406 -       8416 | nan
+col: 407 -       6206 | nan
+col: 408 -       6207 | nan
+col: 409 -        139 | nan
+col: 410 -        356 | nan
+col: 411 -     228099 | nan
+col: 412 -        775 | nan
+col: 413 -        651 | nan
+col: 414 -        652 | nan
+col: 415 -     225280 | nan
+col: 416 -        595 | nan
+col: 417 -     225070 | nan
+col: 418 -        590 | nan
+col: 419 -        423 | nan
+col: 420 -        596 | nan
+col: 421 -        426 | nan
+col: 422 -     220227 | nan
+col: 423 -       1397 | nan
+col: 424 -     224564 | nan
+col: 425 -        659 | nan
+col: 426 -       8478 | nan
+col: 427 -        806 | nan
+col: 428 -        545 | nan
+col: 429 -        795 | nan
+col: 430 -     228305 | nan
+col: 431 -       8422 | nan
+col: 432 -        620 | nan
+col: 433 -       8474 | nan
+col: 434 -        410 | nan
+col: 435 -     220074 | nan
+col: 436 -        492 | nan
+col: 437 -       8448 | nan
+col: 438 -     226534 | nan
+col: 439 -       8548 | nan
+col: 440 -     224417 | nan
+col: 441 -        362 | nan
+col: 442 -     225133 | nan
+col: 443 -     225117 | nan
+col: 444 -        412 | nan
+col: 445 -        399 | nan
+col: 446 -       5814 | nan
+col: 447 -        393 | nan
+col: 448 -     224700 | nan
+col: 449 -        116 | nan
+col: 450 -       8429 | nan
+col: 451 -        241 | nan
+col: 452 -       8394 | nan
+col: 453 -     226540 | nan
+col: 454 -         95 | nan
+col: 455 -         94 | nan
+col: 456 -        626 | nan
+col: 457 -         96 | nan
+col: 458 -         97 | nan
+col: 459 -       8373 | nan
+col: 460 -        244 | nan
+col: 461 -       1480 | nan
+col: 462 -        122 | nan
+col: 463 -     220073 | nan
+col: 464 -     227293 | nan
+col: 465 -     220072 | nan
+col: 466 -        679 | nan
+col: 467 -        676 | nan
+col: 468 -        627 | nan
+col: 469 -     226536 | nan
+col: 470 -        352 | nan
+col: 471 -     226113 | nan
+col: 472 -         90 | nan
+col: 473 -        662 | nan
+col: 474 -     227468 | nan
+col: 475 -     225091 | nan
+col: 476 -       1528 | nan
+col: 477 -     225129 | nan
+col: 478 -        625 | nan
+col: 479 -       8488 | nan
+col: 480 -        731 | nan
+col: 481 -        421 | nan
+col: 482 -        430 | nan
+col: 483 -       8485 | nan
+col: 484 -        422 | nan
+col: 485 -        431 | nan
+col: 486 -        338 | nan
+col: 487 -     226185 | nan
+col: 488 -     224422 | nan
+col: 489 -     224421 | nan
+col: 490 -     225175 | nan
+col: 491 -     225086 | nan
+col: 492 -     225189 | nan
+col: 493 -        137 | nan
+col: 494 -        648 | nan
+col: 495 -        208 | nan
+col: 496 -        446 | nan
+col: 497 -        130 | nan
+col: 498 -        158 | nan
+col: 499 -        516 | nan
+col: 500 -        823 | nan
+col: 501 -     228137 | nan
+col: 502 -        515 | nan
+col: 503 -       1483 | nan
+col: 504 -        643 | nan
+col: 505 -        466 | nan
+col: 506 -        860 | nan
+col: 507 -        417 | nan
+col: 508 -       8437 | nan
+col: 509 -        705 | nan
+col: 510 -        518 | nan
+col: 511 -        439 | nan
+col: 512 -     227369 | nan
+col: 513 -     227366 | nan
+col: 514 -     225206 | nan
+col: 515 -     226139 | nan
+col: 516 -        645 | nan
+col: 517 -       8475 | nan
+col: 518 -     226136 | nan
+col: 519 -     225672 | nan
+col: 520 -        517 | nan
+col: 521 -        855 | nan
+col: 522 -     220274 | nan
+col: 523 -     225112 | nan
+col: 524 -        413 | nan
+col: 525 -        400 | nan
+col: 526 -        519 | nan
+col: 527 -        521 | nan
+col: 528 -        394 | nan
+col: 529 -       7914 | nan
+col: 530 -       8430 | nan
+col: 531 -        285 | nan
+col: 532 -       7915 | nan
+col: 533 -        123 | nan
+col: 534 -     225105 | nan
+col: 535 -        242 | nan
+col: 536 -        661 | nan
+col: 537 -         56 | nan
+col: 538 -     225638 | nan
+col: 539 -       8369 | nan
+col: 540 -        468 | nan
+col: 541 -         89 | nan
+col: 542 -        822 | nan
+col: 543 -        857 | nan
+col: 544 -        375 | nan
+col: 545 -        472 | nan
+col: 546 -        473 | nan
+col: 547 -        471 | nan
+col: 548 -        345 | nan
+col: 549 -         43 | nan
+col: 550 -     220581 | nan
+col: 551 -         47 | nan
+col: 552 -        357 | nan
+col: 553 -         58 | nan
+col: 554 -        717 | nan
+col: 555 -        387 | nan
+col: 556 -         45 | nan
+col: 557 -       8417 | nan
+col: 558 -       8371 | nan
+col: 559 -        927 | nan
+col: 560 -       1391 | nan
+col: 561 -        465 | nan
+col: 562 -       8482 | nan
+col: 563 -     227287 | nan
+col: 564 -       8552 | nan
+col: 565 -         76 | nan
+col: 566 -     224923 | nan
+col: 567 -     225637 | nan
+col: 568 -     227358 | nan
+col: 569 -       5818 | nan
+col: 570 -        141 | nan
+col: 571 -       8406 | nan
+col: 572 -       1704 | nan
+col: 573 -     226115 | nan
+col: 574 -     223872 | nan
+col: 575 -        303 | nan
+col: 576 -       8403 | nan
+col: 577 -        327 | nan
+col: 578 -        136 | nan
+col: 579 -       1401 | nan
+col: 580 -        363 | nan
+col: 581 -       1390 | nan
+col: 582 -        591 | nan
+col: 583 -       1402 | nan
+col: 584 -       8468 | nan
+col: 585 -        850 | nan
+col: 586 -        388 | nan
+col: 587 -       8365 | nan
+col: 588 -       8418 | nan
+col: 589 -        121 | nan
+col: 590 -       8378 | nan
+col: 591 -        616 | nan
+col: 592 -     227801 | nan
+col: 593 -     225674 | nan
+col: 594 -        353 | nan
+col: 595 -     227454 | nan
+col: 596 -     227455 | nan
+col: 597 -        491 | nan
+col: 598 -        664 | nan
+col: 599 -        629 | nan
+col: 600 -       1481 | nan
+col: 601 -        424 | nan
+col: 602 -       8435 | nan
+col: 603 -       1063 | nan
+col: 604 -     228098 | nan
+col: 605 -     227810 | nan
+col: 606 -        436 | nan
+col: 607 -     225082 | nan
+col: 608 -     220061 | nan
+col: 609 -        339 | nan
+col: 610 -     228101 | nan
+col: 611 -     226473 | nan
+col: 612 -        138 | nan
+col: 613 -     224169 | nan
+col: 614 -        530 | nan
+col: 615 -     224562 | nan
+col: 616 -     220066 | nan
+col: 617 -     225085 | nan
+col: 618 -     220063 | nan
+col: 619 -     220059 | nan
+col: 620 -     220060 | nan
+col: 621 -        368 | nan
+col: 622 -       8438 | nan
+col: 623 -     224751 | nan
+col: 624 -     223962 | nan
+col: 625 -        440 | nan
+col: 626 -       8423 | nan
+col: 627 -     224846 | nan
+col: 628 -     227350 | nan
+col: 629 -        135 | nan
+col: 630 -       8380 | nan
+col: 631 -     224839 | nan
+col: 632 -     226846 | nan
+col: 633 -       8410 | nan
+col: 634 -       1695 | nan
+col: 635 -     227809 | nan
+col: 636 -      50912 | nan
+col: 637 -      51006 | nan
+col: 638 -      51221 | nan
+col: 639 -      51265 | nan
+col: 640 -      51301 | nan
+col: 641 -      51222 | nan
+col: 642 -      51249 | nan
+col: 643 -      51248 | nan
+col: 644 -      51250 | nan
+col: 645 -      51279 | nan
+col: 646 -      51277 | nan
+col: 647 -      50971 | nan
+col: 648 -      50983 | nan
+col: 649 -      50902 | nan
+col: 650 -      50882 | nan
+col: 651 -      50868 | nan
+col: 652 -      50931 | nan
+col: 653 -      50960 | nan
+col: 654 -      50970 | nan
+col: 655 -      50893 | nan
+col: 656 -      51237 | nan
+col: 657 -      51274 | nan
+col: 658 -      51275 | nan
+col: 659 -      50820 | nan
+col: 660 -      51491 | nan
+col: 661 -      51498 | nan
+col: 662 -      51244 | nan
+col: 663 -      51254 | nan
+col: 664 -      51256 | nan
+col: 665 -      51146 | nan
+col: 666 -      51200 | nan
+col: 667 -      50802 | nan
+col: 668 -      50804 | nan
+col: 669 -      50821 | nan
+col: 670 -      50818 | nan
+col: 671 -      50813 | nan
+col: 672 -      50861 | nan
+col: 673 -      50878 | nan
+col: 674 -      51492 | nan
+col: 675 -      50885 | nan
+col: 676 -      50863 | nan
+col: 677 -      51484 | nan
+col: 678 -      51514 | nan
+col: 679 -      51478 | nan
+col: 680 -      50862 | nan
+col: 681 -      51508 | nan
+col: 682 -      51506 | nan
+col: 683 -      51466 | nan
+col: 684 -      51464 | nan
+col: 685 -      51487 | nan
+col: 686 -      51519 | nan
+col: 687 -      51516 | nan
+col: 688 -      51493 | nan
+col: 689 -      51486 | nan
+col: 690 -      51476 | nan
+col: 691 -      50822 | nan
+col: 692 -      50808 | nan
+col: 693 -      50910 | nan
+col: 694 -      50809 | nan
+col: 695 -      50911 | nan
+col: 696 -      50800 | nan
+col: 697 -      51463 | nan
+col: 698 -      50954 | nan
+col: 699 -      50810 | nan
+col: 700 -      50811 | nan
+col: 701 -      50824 | nan
+col: 702 -      50817 | nan
+col: 703 -      50812 | nan
+col: 704 -      50956 | nan
+col: 705 -      51003 | nan
+col: 706 -      50806 | nan
+col: 707 -      50825 | nan
+col: 708 -      50816 | nan
+col: 709 -      50867 | nan
+col: 710 -      51144 | nan
+col: 711 -      51214 | nan
+col: 712 -      50826 | nan
+col: 713 -      51087 | nan
+col: 714 -      50828 | nan
+col: 715 -      50920 | nan
+col: 716 -      51233 | nan
+col: 717 -      51082 | nan
+col: 718 -      51246 | nan
+col: 719 -      50819 | nan
+col: 720 -      51143 | nan
+col: 721 -      51251 | nan
+col: 722 -      51255 | nan
+col: 723 -      51137 | nan
+col: 724 -      51252 | nan
+col: 725 -      51100 | nan
+col: 726 -      51267 | nan
+col: 727 -      50827 | nan
+col: 728 -      50993 | nan
+col: 729 -      51266 | nan
+col: 730 -      51009 | nan
+col: 731 -      51268 | nan
+col: 732 -      51093 | nan
+col: 733 -      50823 | nan
+col: 734 -      50801 | nan
+col: 735 -      50933 | nan
+col: 736 -      51000 | nan
+col: 737 -      50952 | nan
+col: 738 -      51482 | nan
+col: 739 -      50998 | nan
+col: 740 -      50953 | nan
+col: 741 -      50924 | nan
+col: 742 -      50880 | nan
+col: 743 -      50879 | nan
+col: 744 -      50999 | nan
+col: 745 -      50887 | nan
+col: 746 -      50979 | nan
+col: 747 -      51104 | nan
+col: 748 -      50815 | nan
+col: 749 -      51512 | nan
+col: 750 -      50908 | nan
+col: 751 -      50803 | nan
+col: 752 -      50852 | nan
+col: 753 -      50907 | nan
+col: 754 -      51079 | nan
+col: 755 -      51075 | nan
+col: 756 -      51071 | nan
+col: 757 -      51074 | nan
+col: 758 -      51092 | nan
+col: 759 -      51090 | nan
+col: 760 -      51097 | nan
+col: 761 -      50904 | nan
+col: 762 -      50903 | nan
+col: 763 -      50935 | nan
+col: 764 -      51010 | nan
+col: 765 -      50922 | nan
+col: 766 -      50905 | nan
+col: 767 -      51078 | nan
+col: 768 -      50856 | nan
+col: 769 -      50909 | nan
+col: 770 -      50883 | nan
+col: 771 -      50981 | nan
+col: 772 -      51523 | nan
+col: 773 -      50884 | nan
+col: 774 -      50964 | nan
+col: 775 -      51283 | nan
+col: 776 -      50925 | nan
+col: 777 -      51260 | nan
+col: 778 -      51462 | nan
+col: 779 -      51479 | nan
+col: 780 -      50967 | nan
+col: 781 -      50919 | nan
+col: 782 -      50963 | nan
+col: 783 -      50976 | nan
+col: 784 -      51007 | nan
+col: 785 -      51501 | nan
+col: 786 -      51002 | nan
+col: 787 -      50995 | nan
+col: 788 -      51288 | nan
+col: 789 -      51257 | nan
+col: 790 -      51102 | nan
+col: 791 -      51213 | nan
+col: 792 -      51151 | nan
+col: 793 -      51287 | nan
+col: 794 -      50889 | nan
+col: 795 -      50917 | nan
+col: 796 -      STAGE | 0.000000
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}47}]:} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+             \PY{n}{num\PYZus{}nan} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{isnan}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+             \PY{n}{percent} \PY{o}{=} \PY{n}{num\PYZus{}nan}\PY{o}{/}\PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+             
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{col: }\PY{l+s+si}{\PYZpc{}03d}\PY{l+s+s2}{ \PYZhy{} }\PY{l+s+si}{\PYZpc{} 10s}\PY{l+s+s2}{ | }\PY{l+s+si}{\PYZpc{} 6d}\PY{l+s+s2}{ / }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{ | }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{headers}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{num\PYZus{}nan}\PY{p}{,} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{percent}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+col: 000 - SUBJECT\_ID |      0 / 47442 | 0.00
+col: 001 -    HADM\_ID |      0 / 47442 | 0.00
+col: 002 -        AGE |      0 / 47442 | 0.00
+col: 003 -     GENDER |      0 / 47442 | 0.00
+col: 004 -     TSTAGE |      0 / 47442 | 0.00
+col: 005 -        829 |  44536 / 47442 | 0.94
+col: 006 -        811 |  44603 / 47442 | 0.94
+col: 007 -        813 |  44619 / 47442 | 0.94
+col: 008 -        791 |  45408 / 47442 | 0.96
+col: 009 -        781 |  45412 / 47442 | 0.96
+col: 010 -        837 |  45044 / 47442 | 0.95
+col: 011 -        212 |  47442 / 47442 | 1.00
+col: 012 -        161 |  47442 / 47442 | 1.00
+col: 013 -        432 |  47442 / 47442 | 1.00
+col: 014 -        184 |  41384 / 47442 | 0.87
+col: 015 -        723 |  41410 / 47442 | 0.87
+col: 016 -        454 |  41432 / 47442 | 0.87
+col: 017 -        674 |  47442 / 47442 | 1.00
+col: 018 -        617 |  47442 / 47442 | 1.00
+col: 019 -        828 |  45369 / 47442 | 0.96
+col: 020 -        479 |  47441 / 47442 | 1.00
+col: 021 -        787 |  45410 / 47442 | 0.96
+col: 022 -        788 |  45399 / 47442 | 0.96
+col: 023 -        478 |  47442 / 47442 | 1.00
+col: 024 -        425 |  47442 / 47442 | 1.00
+col: 025 -        428 |  47442 / 47442 | 1.00
+col: 026 -        599 |  47442 / 47442 | 1.00
+col: 027 -        593 |  47442 / 47442 | 1.00
+col: 028 -         27 |  47442 / 47442 | 1.00
+col: 029 -        644 |  47442 / 47442 | 1.00
+col: 030 -        861 |  45490 / 47442 | 0.96
+col: 031 -        707 |  47442 / 47442 | 1.00
+col: 032 -         80 |  47442 / 47442 | 1.00
+col: 033 -        919 |  47442 / 47442 | 1.00
+col: 034 -        210 |  47442 / 47442 | 1.00
+col: 035 -        704 |  47442 / 47442 | 1.00
+col: 036 -        814 |  45458 / 47442 | 0.96
+col: 037 -        211 |  36388 / 47442 | 0.77
+col: 038 -        742 |  37073 / 47442 | 0.78
+col: 039 -         31 |  47442 / 47442 | 1.00
+col: 040 -        833 |  45519 / 47442 | 0.96
+col: 041 -        646 |  36800 / 47442 | 0.78
+col: 042 -        618 |  36782 / 47442 | 0.78
+col: 043 -        198 |  41483 / 47442 | 0.87
+col: 044 -         84 |  47442 / 47442 | 1.00
+col: 045 -         82 |  47442 / 47442 | 1.00
+col: 046 -         85 |  47442 / 47442 | 1.00
+col: 047 -         86 |  47442 / 47442 | 1.00
+col: 048 -         83 |  47442 / 47442 | 1.00
+col: 049 -         88 |  47442 / 47442 | 1.00
+col: 050 -        159 |  47442 / 47442 | 1.00
+col: 051 -         54 |  47442 / 47442 | 1.00
+col: 052 -         32 |  47442 / 47442 | 1.00
+col: 053 -         87 |  43344 / 47442 | 0.91
+col: 054 -        706 |  47442 / 47442 | 1.00
+col: 055 -        678 |  42208 / 47442 | 0.89
+col: 056 -        677 |  42210 / 47442 | 0.89
+col: 057 -        821 |  45590 / 47442 | 0.96
+col: 058 -        547 |  47442 / 47442 | 1.00
+col: 059 -       8480 |  47442 / 47442 | 1.00
+col: 060 -        156 |  47442 / 47442 | 1.00
+col: 061 -       8381 |  47442 / 47442 | 1.00
+col: 062 -       1046 |  47442 / 47442 | 1.00
+col: 063 -        455 |  38164 / 47442 | 0.80
+col: 064 -       8441 |  38168 / 47442 | 0.80
+col: 065 -        128 |  47442 / 47442 | 1.00
+col: 066 -        456 |  38294 / 47442 | 0.81
+col: 067 -        637 |  47442 / 47442 | 1.00
+col: 068 -        926 |  47442 / 47442 | 1.00
+col: 069 -        550 |  47442 / 47442 | 1.00
+col: 070 -       1127 |  45571 / 47442 | 0.96
+col: 071 -        525 |  47442 / 47442 | 1.00
+col: 072 -        549 |  47442 / 47442 | 1.00
+col: 073 -       8456 |  47442 / 47442 | 1.00
+col: 074 -        467 |  47442 / 47442 | 1.00
+col: 075 -        294 |  47442 / 47442 | 1.00
+col: 076 -        324 |  47442 / 47442 | 1.00
+col: 077 -       8400 |  47442 / 47442 | 1.00
+col: 078 -        663 |  47442 / 47442 | 1.00
+col: 079 -         77 |  47442 / 47442 | 1.00
+col: 080 -        917 |  47442 / 47442 | 1.00
+col: 081 -       1125 |  47442 / 47442 | 1.00
+col: 082 -        827 |  45728 / 47442 | 0.96
+col: 083 -        786 |  45709 / 47442 | 0.96
+col: 084 -        925 |  47442 / 47442 | 1.00
+col: 085 -     220615 |  45850 / 47442 | 0.97
+col: 086 -     220602 |  45848 / 47442 | 0.97
+col: 087 -     225624 |  45851 / 47442 | 0.97
+col: 088 -     227443 |  45860 / 47442 | 0.97
+col: 089 -     220645 |  45874 / 47442 | 0.97
+col: 090 -     227442 |  45866 / 47442 | 0.97
+col: 091 -     220545 |  45720 / 47442 | 0.96
+col: 092 -        815 |  45642 / 47442 | 0.96
+col: 093 -     227073 |  45897 / 47442 | 0.97
+col: 094 -        824 |  45645 / 47442 | 0.96
+col: 095 -     227457 |  45829 / 47442 | 0.97
+col: 096 -     220546 |  45860 / 47442 | 0.97
+col: 097 -     220621 |  45911 / 47442 | 0.97
+col: 098 -     220228 |  45821 / 47442 | 0.97
+col: 099 -        825 |  45652 / 47442 | 0.96
+col: 100 -       1337 |  47442 / 47442 | 1.00
+col: 101 -        187 |  47442 / 47442 | 1.00
+col: 102 -       1087 |  47442 / 47442 | 1.00
+col: 103 -        154 |  47442 / 47442 | 1.00
+col: 104 -     220635 |  45995 / 47442 | 0.97
+col: 105 -        470 |  44688 / 47442 | 0.94
+col: 106 -        621 |  47442 / 47442 | 1.00
+col: 107 -     225625 |  46016 / 47442 | 0.97
+col: 108 -     225677 |  46011 / 47442 | 0.97
+col: 109 -        527 |  47442 / 47442 | 1.00
+col: 110 -     220739 |  42369 / 47442 | 0.89
+col: 111 -     223900 |  42394 / 47442 | 0.89
+col: 112 -     223901 |  42389 / 47442 | 0.89
+col: 113 -     220045 |  38379 / 47442 | 0.81
+col: 114 -     220210 |  38433 / 47442 | 0.81
+col: 115 -     226512 |  43564 / 47442 | 0.92
+col: 116 -     220277 |  38567 / 47442 | 0.81
+col: 117 -     224641 |  41894 / 47442 | 0.88
+col: 118 -     220047 |  42069 / 47442 | 0.89
+col: 119 -     220046 |  42070 / 47442 | 0.89
+col: 120 -     223770 |  42084 / 47442 | 0.89
+col: 121 -     223769 |  42092 / 47442 | 0.89
+col: 122 -     224161 |  42123 / 47442 | 0.89
+col: 123 -     224162 |  42124 / 47442 | 0.89
+col: 124 -     224168 |  41986 / 47442 | 0.88
+col: 125 -     226253 |  42368 / 47442 | 0.89
+col: 126 -     220179 |  39218 / 47442 | 0.83
+col: 127 -     220180 |  39217 / 47442 | 0.83
+col: 128 -     220181 |  39205 / 47442 | 0.83
+col: 129 -     223761 |  42041 / 47442 | 0.89
+col: 130 -        297 |  47442 / 47442 | 1.00
+col: 131 -       1535 |  45173 / 47442 | 0.95
+col: 132 -       1529 |  45193 / 47442 | 0.95
+col: 133 -       1525 |  45860 / 47442 | 0.97
+col: 134 -       1162 |  45863 / 47442 | 0.97
+col: 135 -       1536 |  45552 / 47442 | 0.96
+col: 136 -       8401 |  47442 / 47442 | 1.00
+col: 137 -       1523 |  45852 / 47442 | 0.97
+col: 138 -       1542 |  45908 / 47442 | 0.97
+col: 139 -        325 |  47442 / 47442 | 1.00
+col: 140 -     223752 |  42258 / 47442 | 0.89
+col: 141 -     223751 |  42258 / 47442 | 0.89
+col: 142 -     227465 |  45974 / 47442 | 0.97
+col: 143 -     227467 |  45971 / 47442 | 0.97
+col: 144 -       1425 |  47442 / 47442 | 1.00
+col: 145 -         72 |  47442 / 47442 | 1.00
+col: 146 -     227466 |  45995 / 47442 | 0.97
+col: 147 -       1532 |  45997 / 47442 | 0.97
+col: 148 -        477 |  47442 / 47442 | 1.00
+col: 149 -        582 |  47442 / 47442 | 1.00
+col: 150 -        642 |  47442 / 47442 | 1.00
+col: 151 -         49 |  47442 / 47442 | 1.00
+col: 152 -     227688 |  43770 / 47442 | 0.92
+col: 153 -        762 |  45204 / 47442 | 0.95
+col: 154 -        229 |  47442 / 47442 | 1.00
+col: 155 -        526 |  47442 / 47442 | 1.00
+col: 156 -       8392 |  47442 / 47442 | 1.00
+col: 157 -       1622 |  47442 / 47442 | 1.00
+col: 158 -       1623 |  47442 / 47442 | 1.00
+col: 159 -       1427 |  47442 / 47442 | 1.00
+col: 160 -        232 |  47442 / 47442 | 1.00
+col: 161 -       1534 |  46078 / 47442 | 0.97
+col: 162 -       1522 |  46062 / 47442 | 0.97
+col: 163 -        581 |  42600 / 47442 | 0.90
+col: 164 -        763 |  44875 / 47442 | 0.95
+col: 165 -        680 |  47442 / 47442 | 1.00
+col: 166 -        807 |  46495 / 47442 | 0.98
+col: 167 -       1530 |  46035 / 47442 | 0.97
+col: 168 -       1286 |  46038 / 47442 | 0.97
+col: 169 -       1533 |  46048 / 47442 | 0.97
+col: 170 -     226531 |  44274 / 47442 | 0.93
+col: 171 -        916 |  47442 / 47442 | 1.00
+col: 172 -       1484 |  47442 / 47442 | 1.00
+col: 173 -        640 |  47442 / 47442 | 1.00
+col: 174 -        522 |  47442 / 47442 | 1.00
+col: 175 -        780 |  45495 / 47442 | 0.96
+col: 176 -     225103 |  45070 / 47442 | 0.95
+col: 177 -        777 |  45511 / 47442 | 0.96
+col: 178 -       8367 |  47442 / 47442 | 1.00
+col: 179 -        778 |  45520 / 47442 | 0.96
+col: 180 -        779 |  45559 / 47442 | 0.96
+col: 181 -        171 |  47442 / 47442 | 1.00
+col: 182 -        524 |  47442 / 47442 | 1.00
+col: 183 -       1089 |  47442 / 47442 | 1.00
+col: 184 -        167 |  47442 / 47442 | 1.00
+col: 185 -     223834 |  45269 / 47442 | 0.95
+col: 186 -       1044 |  47442 / 47442 | 1.00
+col: 187 -        169 |  47442 / 47442 | 1.00
+col: 188 -     225187 |  45828 / 47442 | 0.97
+col: 189 -        776 |  45542 / 47442 | 0.96
+col: 190 -        168 |  47442 / 47442 | 1.00
+col: 191 -     225185 |  45873 / 47442 | 0.97
+col: 192 -       5815 |  41041 / 47442 | 0.87
+col: 193 -       8549 |  41042 / 47442 | 0.87
+col: 194 -       5820 |  41083 / 47442 | 0.87
+col: 195 -       8554 |  41114 / 47442 | 0.87
+col: 196 -        580 |  45701 / 47442 | 0.96
+col: 197 -        170 |  47442 / 47442 | 1.00
+col: 198 -        604 |  47442 / 47442 | 1.00
+col: 199 -       8553 |  41187 / 47442 | 0.87
+col: 200 -       5819 |  41184 / 47442 | 0.87
+col: 201 -     225664 |  46596 / 47442 | 0.98
+col: 202 -       1126 |  45596 / 47442 | 0.96
+col: 203 -        165 |  47442 / 47442 | 1.00
+col: 204 -        660 |  47442 / 47442 | 1.00
+col: 205 -        166 |  47442 / 47442 | 1.00
+col: 206 -         51 |  44751 / 47442 | 0.94
+col: 207 -       8368 |  44754 / 47442 | 0.94
+col: 208 -         52 |  44833 / 47442 | 0.95
+col: 209 -        190 |  45099 / 47442 | 0.95
+col: 210 -       5817 |  41528 / 47442 | 0.88
+col: 211 -       8551 |  41529 / 47442 | 0.88
+col: 212 -        172 |  47442 / 47442 | 1.00
+col: 213 -     225184 |  46815 / 47442 | 0.99
+col: 214 -        230 |  47442 / 47442 | 1.00
+col: 215 -        283 |  47442 / 47442 | 1.00
+col: 216 -        127 |  47442 / 47442 | 1.00
+col: 217 -     225092 |  45471 / 47442 | 0.96
+col: 218 -        548 |  47442 / 47442 | 1.00
+col: 219 -        720 |  47442 / 47442 | 1.00
+col: 220 -        722 |  47442 / 47442 | 1.00
+col: 221 -         40 |  47442 / 47442 | 1.00
+col: 222 -        615 |  45633 / 47442 | 0.96
+col: 223 -        605 |  47442 / 47442 | 1.00
+col: 224 -        816 |  46455 / 47442 | 0.98
+col: 225 -     227368 |  44957 / 47442 | 0.95
+col: 226 -        506 |  45599 / 47442 | 0.96
+col: 227 -        450 |  45665 / 47442 | 0.96
+col: 228 -        623 |  47442 / 47442 | 1.00
+col: 229 -        434 |  45718 / 47442 | 0.96
+col: 230 -       8467 |  47442 / 47442 | 1.00
+col: 231 -        585 |  47442 / 47442 | 1.00
+col: 232 -        218 |  45723 / 47442 | 0.96
+col: 233 -     226138 |  44970 / 47442 | 0.95
+col: 234 -        631 |  45733 / 47442 | 0.96
+col: 235 -        444 |  45728 / 47442 | 0.96
+col: 236 -        584 |  47442 / 47442 | 1.00
+col: 237 -       8466 |  47442 / 47442 | 1.00
+col: 238 -        622 |  47442 / 47442 | 1.00
+col: 239 -        610 |  47442 / 47442 | 1.00
+col: 240 -     225094 |  45545 / 47442 | 0.96
+col: 241 -     223758 |  47442 / 47442 | 1.00
+col: 242 -       1047 |  47442 / 47442 | 1.00
+col: 243 -         39 |  47442 / 47442 | 1.00
+col: 244 -     225313 |  47158 / 47442 | 0.99
+col: 245 -        733 |  46115 / 47442 | 0.97
+col: 246 -        535 |  45886 / 47442 | 0.97
+col: 247 -        682 |  45885 / 47442 | 0.97
+col: 248 -        619 |  45727 / 47442 | 0.96
+col: 249 -        614 |  45868 / 47442 | 0.97
+col: 250 -        578 |  46683 / 47442 | 0.98
+col: 251 -        235 |  47442 / 47442 | 1.00
+col: 252 -        683 |  45818 / 47442 | 0.97
+col: 253 -       8393 |  47442 / 47442 | 1.00
+col: 254 -        732 |  47442 / 47442 | 1.00
+col: 255 -        131 |  45945 / 47442 | 0.97
+col: 256 -       8477 |  47442 / 47442 | 1.00
+col: 257 -     225668 |  46296 / 47442 | 0.98
+col: 258 -        238 |  47442 / 47442 | 1.00
+col: 259 -        657 |  47442 / 47442 | 1.00
+col: 260 -        219 |  45760 / 47442 | 0.96
+col: 261 -       8382 |  47442 / 47442 | 1.00
+col: 262 -        157 |  47442 / 47442 | 1.00
+col: 263 -        200 |  47442 / 47442 | 1.00
+col: 264 -     228096 |  45024 / 47442 | 0.95
+col: 265 -       8388 |  47442 / 47442 | 1.00
+col: 266 -        203 |  47442 / 47442 | 1.00
+col: 267 -        543 |  46249 / 47442 | 0.97
+col: 268 -        818 |  46100 / 47442 | 0.97
+col: 269 -     223830 |  46257 / 47442 | 0.98
+col: 270 -        656 |  47442 / 47442 | 1.00
+col: 271 -     220224 |  46262 / 47442 | 0.98
+col: 272 -     220235 |  46262 / 47442 | 0.98
+col: 273 -     224828 |  46262 / 47442 | 0.98
+col: 274 -     225698 |  46262 / 47442 | 0.98
+col: 275 -     225118 |  45743 / 47442 | 0.96
+col: 276 -       8476 |  47442 / 47442 | 1.00
+col: 277 -     225106 |  45741 / 47442 | 0.96
+col: 278 -     225087 |  45804 / 47442 | 0.97
+col: 279 -        784 |  46483 / 47442 | 0.98
+col: 280 -     227367 |  44325 / 47442 | 0.93
+col: 281 -        920 |  46459 / 47442 | 0.98
+col: 282 -     227349 |  46196 / 47442 | 0.97
+col: 283 -         69 |  46464 / 47442 | 0.98
+col: 284 -     226137 |  44355 / 47442 | 0.93
+col: 285 -     225126 |  45909 / 47442 | 0.97
+col: 286 -       8390 |  47442 / 47442 | 1.00
+col: 287 -     226179 |  46261 / 47442 | 0.98
+col: 288 -     225113 |  45844 / 47442 | 0.97
+col: 289 -        684 |  47066 / 47442 | 0.99
+col: 290 -        769 |  46555 / 47442 | 0.98
+col: 291 -        770 |  46559 / 47442 | 0.98
+col: 292 -       8454 |  47442 / 47442 | 1.00
+col: 293 -     223835 |  45354 / 47442 | 0.96
+col: 294 -        773 |  46583 / 47442 | 0.98
+col: 295 -     226707 |  46435 / 47442 | 0.98
+col: 296 -     226730 |  46433 / 47442 | 0.98
+col: 297 -        113 |  46647 / 47442 | 0.98
+col: 298 -     225067 |  46204 / 47442 | 0.97
+col: 299 -        221 |  47356 / 47442 | 1.00
+col: 300 -        772 |  46746 / 47442 | 0.99
+col: 301 -     225110 |  45908 / 47442 | 0.97
+col: 302 -       1045 |  47442 / 47442 | 1.00
+col: 303 -     220644 |  46706 / 47442 | 0.98
+col: 304 -     220587 |  46706 / 47442 | 0.98
+col: 305 -     224639 |  46631 / 47442 | 0.98
+col: 306 -     225690 |  46714 / 47442 | 0.98
+col: 307 -        284 |  47442 / 47442 | 1.00
+col: 308 -     225122 |  45944 / 47442 | 0.97
+col: 309 -        848 |  46674 / 47442 | 0.98
+col: 310 -     225612 |  46721 / 47442 | 0.98
+col: 311 -        236 |  47442 / 47442 | 1.00
+col: 312 -        834 |  47021 / 47442 | 0.99
+col: 313 -        183 |  47442 / 47442 | 1.00
+col: 314 -       1531 |  46267 / 47442 | 0.98
+col: 315 -     225124 |  45925 / 47442 | 0.97
+col: 316 -     225074 |  45894 / 47442 | 0.97
+col: 317 -     225667 |  46765 / 47442 | 0.99
+col: 318 -        411 |  47442 / 47442 | 1.00
+col: 319 -        398 |  47442 / 47442 | 1.00
+col: 320 -     225078 |  46060 / 47442 | 0.97
+col: 321 -       1043 |  47442 / 47442 | 1.00
+col: 322 -        392 |  47442 / 47442 | 1.00
+col: 323 -         50 |  46286 / 47442 | 0.98
+col: 324 -       8428 |  47442 / 47442 | 1.00
+col: 325 -     220339 |  45720 / 47442 | 0.96
+col: 326 -        797 |  46745 / 47442 | 0.99
+col: 327 -        798 |  46745 / 47442 | 0.99
+col: 328 -        799 |  46745 / 47442 | 0.99
+col: 329 -        796 |  46745 / 47442 | 0.99
+col: 330 -     224687 |  45774 / 47442 | 0.96
+col: 331 -        300 |  47442 / 47442 | 1.00
+col: 332 -        800 |  46745 / 47442 | 0.99
+col: 333 -     220293 |  45797 / 47442 | 0.97
+col: 334 -     223873 |  45802 / 47442 | 0.97
+col: 335 -     224697 |  45764 / 47442 | 0.96
+col: 336 -     220292 |  45802 / 47442 | 0.97
+col: 337 -     223876 |  45805 / 47442 | 0.97
+col: 338 -     224685 |  45794 / 47442 | 0.97
+col: 339 -     224695 |  45805 / 47442 | 0.97
+col: 340 -     223874 |  45885 / 47442 | 0.97
+col: 341 -     225639 |  46740 / 47442 | 0.99
+col: 342 -     225640 |  46740 / 47442 | 0.99
+col: 343 -     225641 |  46740 / 47442 | 0.99
+col: 344 -     225642 |  46740 / 47442 | 0.99
+col: 345 -     225643 |  46740 / 47442 | 0.99
+col: 346 -       8402 |  47442 / 47442 | 1.00
+col: 347 -     224689 |  45952 / 47442 | 0.97
+col: 348 -     220056 |  47084 / 47442 | 0.99
+col: 349 -     220734 |  46954 / 47442 | 0.99
+col: 350 -     220058 |  47084 / 47442 | 0.99
+col: 351 -     223875 |  46044 / 47442 | 0.97
+col: 352 -        114 |  47207 / 47442 | 1.00
+col: 353 -     225634 |  46822 / 47442 | 0.99
+col: 354 -     227471 |  46970 / 47442 | 0.99
+col: 355 -     224690 |  46065 / 47442 | 0.97
+col: 356 -     226180 |  46102 / 47442 | 0.97
+col: 357 -        197 |  47442 / 47442 | 1.00
+col: 358 -     220052 |  46537 / 47442 | 0.98
+col: 359 -       1703 |  47442 / 47442 | 1.00
+col: 360 -     224738 |  45958 / 47442 | 0.97
+col: 361 -     220050 |  46592 / 47442 | 0.98
+col: 362 -     220051 |  46593 / 47442 | 0.98
+col: 363 -     225076 |  46075 / 47442 | 0.97
+col: 364 -     227456 |  46922 / 47442 | 0.99
+col: 365 -     227292 |  47073 / 47442 | 0.99
+col: 366 -     226107 |  47074 / 47442 | 0.99
+col: 367 -     225210 |  47101 / 47442 | 0.99
+col: 368 -        326 |  47442 / 47442 | 1.00
+col: 369 -     224688 |  45939 / 47442 | 0.97
+col: 370 -     224684 |  45978 / 47442 | 0.97
+col: 371 -        202 |  47442 / 47442 | 1.00
+col: 372 -       1517 |  47442 / 47442 | 1.00
+col: 373 -     227429 |  46841 / 47442 | 0.99
+col: 374 -     226871 |  46064 / 47442 | 0.97
+col: 375 -     226873 |  46078 / 47442 | 0.97
+col: 376 -       5813 |  46205 / 47442 | 0.97
+col: 377 -       8547 |  46204 / 47442 | 0.97
+col: 378 -       1698 |  47442 / 47442 | 1.00
+col: 379 -       1521 |  46908 / 47442 | 0.99
+col: 380 -       8492 |  47442 / 47442 | 1.00
+col: 381 -        817 |  46906 / 47442 | 0.99
+col: 382 -     228100 |  45974 / 47442 | 0.97
+col: 383 -        785 |  46830 / 47442 | 0.99
+col: 384 -       1538 |  46860 / 47442 | 0.99
+col: 385 -     224701 |  47134 / 47442 | 0.99
+col: 386 -     220632 |  46980 / 47442 | 0.99
+col: 387 -     224686 |  47077 / 47442 | 0.99
+col: 388 -     226169 |  46957 / 47442 | 0.99
+col: 389 -     226537 |  46759 / 47442 | 0.99
+col: 390 -         70 |  47158 / 47442 | 0.99
+col: 391 -         71 |  47158 / 47442 | 0.99
+col: 392 -       6208 |  46299 / 47442 | 0.98
+col: 393 -     224696 |  46594 / 47442 | 0.98
+col: 394 -     227464 |  46770 / 47442 | 0.99
+col: 395 -     227565 |  46560 / 47442 | 0.98
+col: 396 -     227566 |  46565 / 47442 | 0.98
+col: 397 -        783 |  47442 / 47442 | 1.00
+col: 398 -     225188 |  47237 / 47442 | 1.00
+col: 399 -        655 |  47442 / 47442 | 1.00
+col: 400 -        374 |  47442 / 47442 | 1.00
+col: 401 -       1479 |  47442 / 47442 | 1.00
+col: 402 -        386 |  47442 / 47442 | 1.00
+col: 403 -     227445 |  46937 / 47442 | 0.99
+col: 404 -     228236 |  46318 / 47442 | 0.98
+col: 405 -        344 |  47442 / 47442 | 1.00
+col: 406 -       8416 |  47442 / 47442 | 1.00
+col: 407 -       6206 |  46603 / 47442 | 0.98
+col: 408 -       6207 |  46617 / 47442 | 0.98
+col: 409 -        139 |  47442 / 47442 | 1.00
+col: 410 -        356 |  47442 / 47442 | 1.00
+col: 411 -     228099 |  45605 / 47442 | 0.96
+col: 412 -        775 |  46979 / 47442 | 0.99
+col: 413 -        651 |  47425 / 47442 | 1.00
+col: 414 -        652 |  47425 / 47442 | 1.00
+col: 415 -     225280 |  47441 / 47442 | 1.00
+col: 416 -        595 |  47426 / 47442 | 1.00
+col: 417 -     225070 |  46806 / 47442 | 0.99
+col: 418 -        590 |  47442 / 47442 | 1.00
+col: 419 -        423 |  47442 / 47442 | 1.00
+col: 420 -        596 |  47442 / 47442 | 1.00
+col: 421 -        426 |  47442 / 47442 | 1.00
+col: 422 -     220227 |  47218 / 47442 | 1.00
+col: 423 -       1397 |  47426 / 47442 | 1.00
+col: 424 -     224564 |  46967 / 47442 | 0.99
+col: 425 -        659 |  47442 / 47442 | 1.00
+col: 426 -       8478 |  47442 / 47442 | 1.00
+col: 427 -        806 |  47154 / 47442 | 0.99
+col: 428 -        545 |  47442 / 47442 | 1.00
+col: 429 -        795 |  47010 / 47442 | 0.99
+col: 430 -     228305 |  45995 / 47442 | 0.97
+col: 431 -       8422 |  47442 / 47442 | 1.00
+col: 432 -        620 |  47442 / 47442 | 1.00
+col: 433 -       8474 |  47442 / 47442 | 1.00
+col: 434 -        410 |  47442 / 47442 | 1.00
+col: 435 -     220074 |  47029 / 47442 | 0.99
+col: 436 -        492 |  46810 / 47442 | 0.99
+col: 437 -       8448 |  46811 / 47442 | 0.99
+col: 438 -     226534 |  46997 / 47442 | 0.99
+col: 439 -       8548 |  46935 / 47442 | 0.99
+col: 440 -     224417 |  46963 / 47442 | 0.99
+col: 441 -        362 |  47442 / 47442 | 1.00
+col: 442 -     225133 |  46709 / 47442 | 0.98
+col: 443 -     225117 |  46884 / 47442 | 0.99
+col: 444 -        412 |  47442 / 47442 | 1.00
+col: 445 -        399 |  47442 / 47442 | 1.00
+col: 446 -       5814 |  46944 / 47442 | 0.99
+col: 447 -        393 |  47442 / 47442 | 1.00
+col: 448 -     224700 |  46961 / 47442 | 0.99
+col: 449 -        116 |  47214 / 47442 | 1.00
+col: 450 -       8429 |  47442 / 47442 | 1.00
+col: 451 -        241 |  47442 / 47442 | 1.00
+col: 452 -       8394 |  47442 / 47442 | 1.00
+col: 453 -     226540 |  46959 / 47442 | 0.99
+col: 454 -         95 |  47442 / 47442 | 1.00
+col: 455 -         94 |  47442 / 47442 | 1.00
+col: 456 -        626 |  47244 / 47442 | 1.00
+col: 457 -         96 |  47442 / 47442 | 1.00
+col: 458 -         97 |  47442 / 47442 | 1.00
+col: 459 -       8373 |  47442 / 47442 | 1.00
+col: 460 -        244 |  47442 / 47442 | 1.00
+col: 461 -       1480 |  47442 / 47442 | 1.00
+col: 462 -        122 |  47442 / 47442 | 1.00
+col: 463 -     220073 |  47287 / 47442 | 1.00
+col: 464 -     227293 |  46867 / 47442 | 0.99
+col: 465 -     220072 |  47288 / 47442 | 1.00
+col: 466 -        679 |  47167 / 47442 | 0.99
+col: 467 -        676 |  47168 / 47442 | 0.99
+col: 468 -        627 |  47261 / 47442 | 1.00
+col: 469 -     226536 |  47070 / 47442 | 0.99
+col: 470 -        352 |  47442 / 47442 | 1.00
+col: 471 -     226113 |  46857 / 47442 | 0.99
+col: 472 -         90 |  47261 / 47442 | 1.00
+col: 473 -        662 |  47262 / 47442 | 1.00
+col: 474 -     227468 |  47228 / 47442 | 1.00
+col: 475 -     225091 |  46944 / 47442 | 0.99
+col: 476 -       1528 |  47203 / 47442 | 0.99
+col: 477 -     225129 |  46931 / 47442 | 0.99
+col: 478 -        625 |  47280 / 47442 | 1.00
+col: 479 -       8488 |  47442 / 47442 | 1.00
+col: 480 -        731 |  47442 / 47442 | 1.00
+col: 481 -        421 |  47270 / 47442 | 1.00
+col: 482 -        430 |  47270 / 47442 | 1.00
+col: 483 -       8485 |  47442 / 47442 | 1.00
+col: 484 -        422 |  47286 / 47442 | 1.00
+col: 485 -        431 |  47286 / 47442 | 1.00
+col: 486 -        338 |  47442 / 47442 | 1.00
+col: 487 -     226185 |  47356 / 47442 | 1.00
+col: 488 -     224422 |  47435 / 47442 | 1.00
+col: 489 -     224421 |  47435 / 47442 | 1.00
+col: 490 -     225175 |  46999 / 47442 | 0.99
+col: 491 -     225086 |  46984 / 47442 | 0.99
+col: 492 -     225189 |  47428 / 47442 | 1.00
+col: 493 -        137 |  47442 / 47442 | 1.00
+col: 494 -        648 |  47442 / 47442 | 1.00
+col: 495 -        208 |  47442 / 47442 | 1.00
+col: 496 -        446 |  47442 / 47442 | 1.00
+col: 497 -        130 |  47442 / 47442 | 1.00
+col: 498 -        158 |  47442 / 47442 | 1.00
+col: 499 -        516 |  47442 / 47442 | 1.00
+col: 500 -        823 |  47273 / 47442 | 1.00
+col: 501 -     228137 |  47356 / 47442 | 1.00
+col: 502 -        515 |  47442 / 47442 | 1.00
+col: 503 -       1483 |  47442 / 47442 | 1.00
+col: 504 -        643 |  47442 / 47442 | 1.00
+col: 505 -        466 |  47442 / 47442 | 1.00
+col: 506 -        860 |  47360 / 47442 | 1.00
+col: 507 -        417 |  47266 / 47442 | 1.00
+col: 508 -       8437 |  47442 / 47442 | 1.00
+col: 509 -        705 |  47442 / 47442 | 1.00
+col: 510 -        518 |  47442 / 47442 | 1.00
+col: 511 -        439 |  47371 / 47442 | 1.00
+col: 512 -     227369 |  47089 / 47442 | 0.99
+col: 513 -     227366 |  46980 / 47442 | 0.99
+col: 514 -     225206 |  47257 / 47442 | 1.00
+col: 515 -     226139 |  47097 / 47442 | 0.99
+col: 516 -        645 |  47442 / 47442 | 1.00
+col: 517 -       8475 |  47442 / 47442 | 1.00
+col: 518 -     226136 |  46992 / 47442 | 0.99
+col: 519 -     225672 |  47150 / 47442 | 0.99
+col: 520 -        517 |  47317 / 47442 | 1.00
+col: 521 -        855 |  47413 / 47442 | 1.00
+col: 522 -     220274 |  47309 / 47442 | 1.00
+col: 523 -     225112 |  47088 / 47442 | 0.99
+col: 524 -        413 |  47442 / 47442 | 1.00
+col: 525 -        400 |  47442 / 47442 | 1.00
+col: 526 -        519 |  47355 / 47442 | 1.00
+col: 527 -        521 |  47352 / 47442 | 1.00
+col: 528 -        394 |  47442 / 47442 | 1.00
+col: 529 -       7914 |  47442 / 47442 | 1.00
+col: 530 -       8430 |  47442 / 47442 | 1.00
+col: 531 -        285 |  47442 / 47442 | 1.00
+col: 532 -       7915 |  47442 / 47442 | 1.00
+col: 533 -        123 |  47442 / 47442 | 1.00
+col: 534 -     225105 |  47084 / 47442 | 0.99
+col: 535 -        242 |  47442 / 47442 | 1.00
+col: 536 -        661 |  47442 / 47442 | 1.00
+col: 537 -         56 |  47442 / 47442 | 1.00
+col: 538 -     225638 |  47212 / 47442 | 1.00
+col: 539 -       8369 |  47442 / 47442 | 1.00
+col: 540 -        468 |  47442 / 47442 | 1.00
+col: 541 -         89 |  47331 / 47442 | 1.00
+col: 542 -        822 |  47377 / 47442 | 1.00
+col: 543 -        857 |  47395 / 47442 | 1.00
+col: 544 -        375 |  47442 / 47442 | 1.00
+col: 545 -        472 |  47408 / 47442 | 1.00
+col: 546 -        473 |  47408 / 47442 | 1.00
+col: 547 -        471 |  47398 / 47442 | 1.00
+col: 548 -        345 |  47442 / 47442 | 1.00
+col: 549 -         43 |  47442 / 47442 | 1.00
+col: 550 -     220581 |  47211 / 47442 | 1.00
+col: 551 -         47 |  47442 / 47442 | 1.00
+col: 552 -        357 |  47442 / 47442 | 1.00
+col: 553 -         58 |  47383 / 47442 | 1.00
+col: 554 -        717 |  47442 / 47442 | 1.00
+col: 555 -        387 |  47442 / 47442 | 1.00
+col: 556 -         45 |  47442 / 47442 | 1.00
+col: 557 -       8417 |  47442 / 47442 | 1.00
+col: 558 -       8371 |  47380 / 47442 | 1.00
+col: 559 -        927 |  47442 / 47442 | 1.00
+col: 560 -       1391 |  47387 / 47442 | 1.00
+col: 561 -        465 |  47442 / 47442 | 1.00
+col: 562 -       8482 |  47442 / 47442 | 1.00
+col: 563 -     227287 |  47346 / 47442 | 1.00
+col: 564 -       8552 |  47192 / 47442 | 0.99
+col: 565 -         76 |  47442 / 47442 | 1.00
+col: 566 -     224923 |  47261 / 47442 | 1.00
+col: 567 -     225637 |  47255 / 47442 | 1.00
+col: 568 -     227358 |  47298 / 47442 | 1.00
+col: 569 -       5818 |  47199 / 47442 | 0.99
+col: 570 -        141 |  47330 / 47442 | 1.00
+col: 571 -       8406 |  47442 / 47442 | 1.00
+col: 572 -       1704 |  47312 / 47442 | 1.00
+col: 573 -     226115 |  47324 / 47442 | 1.00
+col: 574 -     223872 |  47322 / 47442 | 1.00
+col: 575 -        303 |  47442 / 47442 | 1.00
+col: 576 -       8403 |  47442 / 47442 | 1.00
+col: 577 -        327 |  47442 / 47442 | 1.00
+col: 578 -        136 |  47442 / 47442 | 1.00
+col: 579 -       1401 |  47414 / 47442 | 1.00
+col: 580 -        363 |  47442 / 47442 | 1.00
+col: 581 -       1390 |  47414 / 47442 | 1.00
+col: 582 -        591 |  47442 / 47442 | 1.00
+col: 583 -       1402 |  47414 / 47442 | 1.00
+col: 584 -       8468 |  47442 / 47442 | 1.00
+col: 585 -        850 |  47292 / 47442 | 1.00
+col: 586 -        388 |  47442 / 47442 | 1.00
+col: 587 -       8365 |  47442 / 47442 | 1.00
+col: 588 -       8418 |  47442 / 47442 | 1.00
+col: 589 -        121 |  47442 / 47442 | 1.00
+col: 590 -       8378 |  47442 / 47442 | 1.00
+col: 591 -        616 |  47442 / 47442 | 1.00
+col: 592 -     227801 |  47418 / 47442 | 1.00
+col: 593 -     225674 |  47376 / 47442 | 1.00
+col: 594 -        353 |  47442 / 47442 | 1.00
+col: 595 -     227454 |  47430 / 47442 | 1.00
+col: 596 -     227455 |  47442 / 47442 | 1.00
+col: 597 -        491 |  46988 / 47442 | 0.99
+col: 598 -        664 |  47349 / 47442 | 1.00
+col: 599 -        629 |  47442 / 47442 | 1.00
+col: 600 -       1481 |  47442 / 47442 | 1.00
+col: 601 -        424 |  47442 / 47442 | 1.00
+col: 602 -       8435 |  47442 / 47442 | 1.00
+col: 603 -       1063 |  47442 / 47442 | 1.00
+col: 604 -     228098 |  47172 / 47442 | 0.99
+col: 605 -     227810 |  47339 / 47442 | 1.00
+col: 606 -        436 |  47162 / 47442 | 0.99
+col: 607 -     225082 |  47071 / 47442 | 0.99
+col: 608 -     220061 |  47287 / 47442 | 1.00
+col: 609 -        339 |  47442 / 47442 | 1.00
+col: 610 -     228101 |  47237 / 47442 | 1.00
+col: 611 -     226473 |  47388 / 47442 | 1.00
+col: 612 -        138 |  47442 / 47442 | 1.00
+col: 613 -     224169 |  47408 / 47442 | 1.00
+col: 614 -        530 |  47181 / 47442 | 0.99
+col: 615 -     224562 |  47188 / 47442 | 0.99
+col: 616 -     220066 |  47388 / 47442 | 1.00
+col: 617 -     225085 |  47116 / 47442 | 0.99
+col: 618 -     220063 |  47387 / 47442 | 1.00
+col: 619 -     220059 |  47290 / 47442 | 1.00
+col: 620 -     220060 |  47290 / 47442 | 1.00
+col: 621 -        368 |  47442 / 47442 | 1.00
+col: 622 -       8438 |  47442 / 47442 | 1.00
+col: 623 -     224751 |  47378 / 47442 | 1.00
+col: 624 -     223962 |  47386 / 47442 | 1.00
+col: 625 -        440 |  47422 / 47442 | 1.00
+col: 626 -       8423 |  47442 / 47442 | 1.00
+col: 627 -     224846 |  47207 / 47442 | 1.00
+col: 628 -     227350 |  47342 / 47442 | 1.00
+col: 629 -        135 |  47442 / 47442 | 1.00
+col: 630 -       8380 |  47442 / 47442 | 1.00
+col: 631 -     224839 |  47395 / 47442 | 1.00
+col: 632 -     226846 |  47409 / 47442 | 1.00
+col: 633 -       8410 |  47442 / 47442 | 1.00
+col: 634 -       1695 |  47403 / 47442 | 1.00
+col: 635 -     227809 |  47383 / 47442 | 1.00
+col: 636 -      50912 |  42719 / 47442 | 0.90
+col: 637 -      51006 |  42736 / 47442 | 0.90
+col: 638 -      51221 |  42386 / 47442 | 0.89
+col: 639 -      51265 |  42667 / 47442 | 0.90
+col: 640 -      51301 |  42848 / 47442 | 0.90
+col: 641 -      51222 |  42843 / 47442 | 0.90
+col: 642 -      51249 |  42875 / 47442 | 0.90
+col: 643 -      51248 |  42876 / 47442 | 0.90
+col: 644 -      51250 |  42876 / 47442 | 0.90
+col: 645 -      51279 |  42876 / 47442 | 0.90
+col: 646 -      51277 |  42882 / 47442 | 0.90
+col: 647 -      50971 |  42673 / 47442 | 0.90
+col: 648 -      50983 |  42785 / 47442 | 0.90
+col: 649 -      50902 |  42731 / 47442 | 0.90
+col: 650 -      50882 |  42760 / 47442 | 0.90
+col: 651 -      50868 |  42840 / 47442 | 0.90
+col: 652 -      50931 |  42871 / 47442 | 0.90
+col: 653 -      50960 |  43344 / 47442 | 0.91
+col: 654 -      50970 |  43595 / 47442 | 0.92
+col: 655 -      50893 |  43556 / 47442 | 0.92
+col: 656 -      51237 |  43170 / 47442 | 0.91
+col: 657 -      51274 |  43168 / 47442 | 0.91
+col: 658 -      51275 |  43255 / 47442 | 0.91
+col: 659 -      50820 |  42550 / 47442 | 0.90
+col: 660 -      51491 |  45951 / 47442 | 0.97
+col: 661 -      51498 |  46025 / 47442 | 0.97
+col: 662 -      51244 |  45750 / 47442 | 0.96
+col: 663 -      51254 |  45750 / 47442 | 0.96
+col: 664 -      51256 |  45750 / 47442 | 0.96
+col: 665 -      51146 |  45750 / 47442 | 0.96
+col: 666 -      51200 |  45750 / 47442 | 0.96
+col: 667 -      50802 |  42687 / 47442 | 0.90
+col: 668 -      50804 |  42687 / 47442 | 0.90
+col: 669 -      50821 |  42687 / 47442 | 0.90
+col: 670 -      50818 |  42687 / 47442 | 0.90
+col: 671 -      50813 |  44109 / 47442 | 0.93
+col: 672 -      50861 |  45200 / 47442 | 0.95
+col: 673 -      50878 |  45207 / 47442 | 0.95
+col: 674 -      51492 |  46953 / 47442 | 0.99
+col: 675 -      50885 |  45263 / 47442 | 0.95
+col: 676 -      50863 |  45290 / 47442 | 0.95
+col: 677 -      51484 |  47242 / 47442 | 1.00
+col: 678 -      51514 |  47081 / 47442 | 0.99
+col: 679 -      51478 |  47266 / 47442 | 1.00
+col: 680 -      50862 |  45737 / 47442 | 0.96
+col: 681 -      51508 |  47442 / 47442 | 1.00
+col: 682 -      51506 |  47442 / 47442 | 1.00
+col: 683 -      51466 |  47442 / 47442 | 1.00
+col: 684 -      51464 |  47442 / 47442 | 1.00
+col: 685 -      51487 |  47442 / 47442 | 1.00
+col: 686 -      51519 |  47442 / 47442 | 1.00
+col: 687 -      51516 |  46943 / 47442 | 0.99
+col: 688 -      51493 |  46914 / 47442 | 0.99
+col: 689 -      51486 |  47442 / 47442 | 1.00
+col: 690 -      51476 |  46915 / 47442 | 0.99
+col: 691 -      50822 |  44542 / 47442 | 0.94
+col: 692 -      50808 |  44701 / 47442 | 0.94
+col: 693 -      50910 |  45581 / 47442 | 0.96
+col: 694 -      50809 |  44672 / 47442 | 0.94
+col: 695 -      50911 |  46161 / 47442 | 0.97
+col: 696 -      50800 |  47442 / 47442 | 1.00
+col: 697 -      51463 |  47433 / 47442 | 1.00
+col: 698 -      50954 |  46085 / 47442 | 0.97
+col: 699 -      50810 |  44982 / 47442 | 0.95
+col: 700 -      50811 |  44983 / 47442 | 0.95
+col: 701 -      50824 |  45398 / 47442 | 0.96
+col: 702 -      50817 |  46300 / 47442 | 0.98
+col: 703 -      50812 |  47442 / 47442 | 1.00
+col: 704 -      50956 |  46497 / 47442 | 0.98
+col: 705 -      51003 |  46482 / 47442 | 0.98
+col: 706 -      50806 |  45984 / 47442 | 0.97
+col: 707 -      50825 |  46639 / 47442 | 0.98
+col: 708 -      50816 |  46409 / 47442 | 0.98
+col: 709 -      50867 |  46523 / 47442 | 0.98
+col: 710 -      51144 |  46687 / 47442 | 0.98
+col: 711 -      51214 |  46819 / 47442 | 0.99
+col: 712 -      50826 |  46518 / 47442 | 0.98
+col: 713 -      51087 |  47442 / 47442 | 1.00
+col: 714 -      50828 |  47442 / 47442 | 1.00
+col: 715 -      50920 |  47442 / 47442 | 1.00
+col: 716 -      51233 |  47442 / 47442 | 1.00
+col: 717 -      51082 |  47186 / 47442 | 0.99
+col: 718 -      51246 |  47442 / 47442 | 1.00
+col: 719 -      50819 |  46912 / 47442 | 0.99
+col: 720 -      51143 |  46918 / 47442 | 0.99
+col: 721 -      51251 |  46917 / 47442 | 0.99
+col: 722 -      51255 |  46917 / 47442 | 0.99
+col: 723 -      51137 |  47442 / 47442 | 1.00
+col: 724 -      51252 |  47442 / 47442 | 1.00
+col: 725 -      51100 |  47211 / 47442 | 1.00
+col: 726 -      51267 |  47442 / 47442 | 1.00
+col: 727 -      50827 |  47442 / 47442 | 1.00
+col: 728 -      50993 |  47063 / 47442 | 0.99
+col: 729 -      51266 |  47442 / 47442 | 1.00
+col: 730 -      51009 |  47388 / 47442 | 1.00
+col: 731 -      51268 |  47442 / 47442 | 1.00
+col: 732 -      51093 |  47258 / 47442 | 1.00
+col: 733 -      50823 |  46883 / 47442 | 0.99
+col: 734 -      50801 |  46885 / 47442 | 0.99
+col: 735 -      50933 |  47442 / 47442 | 1.00
+col: 736 -      51000 |  47145 / 47442 | 0.99
+col: 737 -      50952 |  47216 / 47442 | 1.00
+col: 738 -      51482 |  47305 / 47442 | 1.00
+col: 739 -      50998 |  47228 / 47442 | 1.00
+col: 740 -      50953 |  47228 / 47442 | 1.00
+col: 741 -      50924 |  47249 / 47442 | 1.00
+col: 742 -      50880 |  47442 / 47442 | 1.00
+col: 743 -      50879 |  47442 / 47442 | 1.00
+col: 744 -      50999 |  47442 / 47442 | 1.00
+col: 745 -      50887 |  47442 / 47442 | 1.00
+col: 746 -      50979 |  47442 / 47442 | 1.00
+col: 747 -      51104 |  47304 / 47442 | 1.00
+col: 748 -      50815 |  47276 / 47442 | 1.00
+col: 749 -      51512 |  47441 / 47442 | 1.00
+col: 750 -      50908 |  46911 / 47442 | 0.99
+col: 751 -      50803 |  47294 / 47442 | 1.00
+col: 752 -      50852 |  47033 / 47442 | 0.99
+col: 753 -      50907 |  47187 / 47442 | 0.99
+col: 754 -      51079 |  47442 / 47442 | 1.00
+col: 755 -      51075 |  47442 / 47442 | 1.00
+col: 756 -      51071 |  47442 / 47442 | 1.00
+col: 757 -      51074 |  47442 / 47442 | 1.00
+col: 758 -      51092 |  47442 / 47442 | 1.00
+col: 759 -      51090 |  47442 / 47442 | 1.00
+col: 760 -      51097 |  47320 / 47442 | 1.00
+col: 761 -      50904 |  47212 / 47442 | 1.00
+col: 762 -      50903 |  47212 / 47442 | 1.00
+col: 763 -      50935 |  47343 / 47442 | 1.00
+col: 764 -      51010 |  47346 / 47442 | 1.00
+col: 765 -      50922 |  47425 / 47442 | 1.00
+col: 766 -      50905 |  47224 / 47442 | 1.00
+col: 767 -      51078 |  47344 / 47442 | 1.00
+col: 768 -      50856 |  47416 / 47442 | 1.00
+col: 769 -      50909 |  47319 / 47442 | 1.00
+col: 770 -      50883 |  47299 / 47442 | 1.00
+col: 771 -      50981 |  47433 / 47442 | 1.00
+col: 772 -      51523 |  47442 / 47442 | 1.00
+col: 773 -      50884 |  47307 / 47442 | 1.00
+col: 774 -      50964 |  47260 / 47442 | 1.00
+col: 775 -      51283 |  47371 / 47442 | 1.00
+col: 776 -      50925 |  47374 / 47442 | 1.00
+col: 777 -      51260 |  47442 / 47442 | 1.00
+col: 778 -      51462 |  47442 / 47442 | 1.00
+col: 779 -      51479 |  47396 / 47442 | 1.00
+col: 780 -      50967 |  47315 / 47442 | 1.00
+col: 781 -      50919 |  47442 / 47442 | 1.00
+col: 782 -      50963 |  47343 / 47442 | 1.00
+col: 783 -      50976 |  47409 / 47442 | 1.00
+col: 784 -      51007 |  47327 / 47442 | 1.00
+col: 785 -      51501 |  47435 / 47442 | 1.00
+col: 786 -      51002 |  47347 / 47442 | 1.00
+col: 787 -      50995 |  47395 / 47442 | 1.00
+col: 788 -      51288 |  47389 / 47442 | 1.00
+col: 789 -      51257 |  47363 / 47442 | 1.00
+col: 790 -      51102 |  47407 / 47442 | 1.00
+col: 791 -      51213 |  47442 / 47442 | 1.00
+col: 792 -      51151 |  47442 / 47442 | 1.00
+col: 793 -      51287 |  47442 / 47442 | 1.00
+col: 794 -      50889 |  47391 / 47442 | 1.00
+col: 795 -      50917 |  47351 / 47442 | 1.00
+col: 796 -      STAGE |      0 / 47442 | 0.00
+
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

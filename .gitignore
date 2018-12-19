@@ -3,3 +3,4 @@ data
 data/*
 *.csv
 *.pyc
+.dbconfig.json
