@@ -69,11 +69,11 @@ def collectHour(hour, table, cursor1, cursor2, fnout, limit=(0, 1000)):
         FROM `FILTERED_ADMISSIONS`
         """
     q = """
-SELECT
-    `SUBJECT_ID`,
-    `HADM_ID`
-FROM `FILTERED_ADMISSIONS`
-"""
+        SELECT
+            `SUBJECT_ID`,
+            `HADM_ID`
+        FROM `FILTERED_ADMISSIONS`
+        """
     if limit != None:
         if type(limit) == tuple:
             q += "\nLIMIT %s, %s" % limit

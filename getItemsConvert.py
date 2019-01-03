@@ -6,7 +6,7 @@ from collections import OrderedDict
 from constants import *
 
 # All item ids (CE & LE)
-ITEM_IDS = CE_ITEM_LABELS + TOP_50_LE_ITEM_IDS
+ITEM_IDS = CE_ITEM_LABELS + TOP_90_LE_ITEM_IDS
 
 # Get item values from tables other than CE
 def getOtherItems(tables, row, hour, cursor, idict):
@@ -48,7 +48,21 @@ def getItems(tables, row, hour, cursor):
     idict = OrderedDict((i, list()) for i in ITEM_IDS)
     idict = getCEItems(row, hour, cursor, idict)
     idict = getOtherItems(tables[1:], row, hour, cursor, idict)
-    return ['?' if len(v) == 0 else sum(v)/len(v) for v in idict.values()]
+
+    out = []
+    return_bool = False
+    for v in idict.values():
+        if len(v) == 0:
+            out.append('?')
+        else:
+            return_bool = True
+            out.append(sum(v)/len(v))
+
+    # if no items were collected return None
+    if return_bool:
+        return out
+    else:
+        return None
 
 # get demographic information, the label, and the time of the staging (TSTAGE)
 # if the subject is AKI negative then label and TSTAGE = 0
@@ -98,7 +112,8 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(0, 1000)):
     q = """
         SELECT
             `SUBJECT_ID`,
-            `HADM_ID`
+            `HADM_ID`,
+            `ETHNICITY`
         FROM `FILTERED_ADMISSIONS`
         """
     if limit != None:
@@ -116,6 +131,7 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(0, 1000)):
             "TSTAGE",
             "AGE",
             "GENDER",
+            "ETHNICITY",
         ] + ITEM_IDS + ["STAGE"])
         t0 = time.time()
         print(q)
@@ -123,8 +139,9 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(0, 1000)):
         # for every subject & hadm id get items in CE & LE in the given hour
         for row in cursor1:
             items = getItems(["CHARTEVENTS", "LABEVENTS"], row, hour, cursor2)
-            demos, label = getDemos(row, hour, cursor2)
-            cfout.writerow(list(row)+demos+items+label)
+            if items != None:
+                demos, label = getDemos(row, hour, cursor2)
+                cfout.writerow(list(row[:2])+demos+list(row[2:])+items+label)
         t1 = time.time()
         print("took %f s" % (t1 - t0))
 
@@ -151,7 +168,7 @@ cursor1 = mydb.cursor(buffered=True)
 cursor2 = mydb.cursor(buffered=True)
 
 # run the function to get the csv output
-collectHour(hour, cursor1, cursor2, path.join(PROCESSED_PATH, "HOUR_%05d.csv" % int(hour)), limit=None)
+collectHour(hour, cursor1, cursor2, path.join(DATA_PATH, "HOUR_%05d.csv" % int(hour)), limit=None)
 
 # close SQL connections
 cursor1.close()
