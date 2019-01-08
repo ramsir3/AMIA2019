@@ -20,7 +20,7 @@ if nargs > 2:
 
     items = set()
     with open(infn, 'r') as inf:
-        cinf = csv.reader(inf, delimiter='\t')
+        cinf = csv.reader(inf, delimiter=',')
         cinf.__next__() #throw away header
         for row in cinf:
             if row[0] != '':
@@ -44,7 +44,7 @@ if nargs > 2:
 
     with open(infn, 'r') as inf:
         with open(os.path.join(PROCESSED_PATH, infn), 'w') as outf:
-            cinf = csv.reader(inf, delimiter='\t')
+            cinf = csv.reader(inf, delimiter=',')
             coutf = csv.writer(outf)
             cinf.__next__() #throw away header
             for row in cinf:

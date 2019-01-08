@@ -3,7 +3,7 @@
 import os.path as path
 import mysql.connector, json, csv, time, sys
 from collections import OrderedDict
-from constants import *
+from constants import DATA_PATH, CE_ITEM_LABELS, TOP_90_LE_ITEM_IDS, ITEM_IDS_UOM, CONVERSIONS, VALIDATIONS
 
 # All item ids (CE & LE)
 ITEM_IDS = CE_ITEM_LABELS + TOP_90_LE_ITEM_IDS
@@ -39,8 +39,19 @@ def getCEItems(row, hour, cursor, idict):
     for l in cursor:
         for cat in ITEM_IDS_UOM:
             if l[0] in ITEM_IDS_UOM[cat]:
-                idict[cat].append(CONVERSIONS[cat](l[1], ITEM_IDS_UOM[cat][l[0]]))
+                idict[cat].append(CONVERSIONS[cat](l[1], ITEM_IDS_UOM[cat][l[0]]))       
     return idict
+
+
+def validate(itemid, value):
+    if itemid in VALIDATIONS:
+        if VALIDATIONS[itemid][0] != None and VALIDATIONS[itemid][1] != None:
+            return VALIDATIONS[itemid][0] >= value and VALIDATIONS[itemid][1] <= value
+        if VALIDATIONS[itemid][0] == None and VALIDATIONS[itemid][1] != None:
+            return VALIDATIONS[itemid][1] <= value
+        if VALIDATIONS[itemid][0] != None and VALIDATIONS[itemid][1] != None:
+            return VALIDATIONS[itemid][0] >= value
+    return True
 
 # call getCEItems & getOtherItems, store them in a dict, and return the avg in the hour
 # if there is no observation for the item in the hour insert a '?'
@@ -49,18 +60,21 @@ def getItems(tables, row, hour, cursor):
     idict = getCEItems(row, hour, cursor, idict)
     idict = getOtherItems(tables[1:], row, hour, cursor, idict)
 
-    out = []
     return_bool = False
-    for v in idict.values():
+    for k, v in idict.items():
         if len(v) == 0:
-            out.append('?')
+            idict[k] = '?'
         else:
             return_bool = True
-            out.append(sum(v)/len(v))
-
+            rv = sum(v)/len(v)
+            if validate(k,rv):
+                idict[k] = rv
+            else:
+                idict[k] = '!'
+    
     # if no items were collected return None
     if return_bool:
-        return out
+        return list(idict.values())
     else:
         return None
 

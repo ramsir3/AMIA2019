@@ -74,15 +74,15 @@ def getDictStats(counts):
 	return out
 
 
-table = "FILTERED_CHARTEVENTS"
-defs = 'D_ITEMS.csv'
-icol = 4
-dIncCols = [2]
+# table = "FILTERED_CHARTEVENTS"
+# defs = 'D_ITEMS.csv'
+# icol = 4
+# dIncCols = [2]
 
-# table = "FILTERED_LABEVENTS"
-# defs = 'D_LABITEMS.csv'
-# icol = 3
-# dIncCols = [2,3,4]
+table = "FILTERED_LABEVENTS"
+defs = 'D_LABITEMS.csv'
+icol = 3
+dIncCols = [2,3,4]
 
 cfgs = None
 with open('.dbconfig.json') as cf:

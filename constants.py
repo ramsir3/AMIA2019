@@ -1,9 +1,9 @@
 import os
 
 DATA_PATH = os.path.join(os.getcwd(), 'data')
-# RAW_PATH = os.path.join(DATA_PATH, 'raw')
-# PROCESSED_PATH = os.path.join(DATA_PATH, 'processed')
-# DEFINITIONS_PATH = os.path.join(DATA_PATH, 'definitions')
+RAW_PATH = os.path.join(DATA_PATH, 'raw')
+PROCESSED_PATH = os.path.join(DATA_PATH, 'processed')
+DEFINITIONS_PATH = os.path.join(DATA_PATH, 'definitions')
 
 
 TOP_50_CE_ITEM_IDS = [
@@ -25,7 +25,7 @@ TOP_90_LE_ITEM_IDS = [
     51252, 51100,
 ]
 CONVERSIONS = {
-    'WEIGHT':           lambda v, u: v * 0.453592 if u == 'lbs' else v, # WEIGHT
+    'WEIGHT':           lambda v, u: v * 0.453592 if u == 'lbs' else v * 0.0283495 if u == 'oz' else v, # WEIGHT
     'HEIGHT':           lambda v, u: v * 2.54     if u == 'in'  else v, # HEIGHT
     'SYSTOLIC BP':      lambda v, u: v, # SYSTOLIC BP
     'DIASTOLIC BP':     lambda v, u: v, # DIASTOLIC BP
@@ -35,29 +35,86 @@ CONVERSIONS = {
     'SPO2':             lambda v, u: v, # SPO2
 }
 
+VALIDATIONS = {
+    'WEIGHT':           [None,None],           
+    'HEIGHT':           [None,None],          
+    'SYSTOLIC BP':      [30,305], # 30-305
+    'DIASTOLIC BP':     [20,180], # 20-180 
+    'TEMPERATURE':      [29.5,41.5], # 29.5 to 41.5 
+    'RESPIRATORY RATE': [6,60], # 6 and 60
+    'HEART RATE':       [None,None],       
+    'SPO2':             [60,100], # >= 60 and <= 100,     
+    50806: [98, 106],
+    50902: [98, 106],
+    50893: [9, 10.5],
+    50821: [80, 100],
+    51250: [80, 100],
+    51006: [8, 20],
+    50820: [7.38, 7.44],
+    50954: [60, 160],
+    50817: [60, 100],
+    51279: [4.2, 5.9],
+    50863: [36, 92],
+    50810: [36, 52],
+    51221: [36, 51],
+    50818: [35, 45],
+    50910: [30, 170],
+    51301: [3.9, 10.7],
+    50862: [3.5, 5.5],
+    50822: [3.5, 5],
+    50971: [3.5, 5],
+    51248: [28, 32],
+    51275: [25, 35],
+    50804: [23, 28],
+    50882: [23, 28],
+    51265: [150, 350],
+    50824: [136, 145],
+    50983: [136, 145],
+    50811: [13, 17],
+    51222: [12, 17],
+    51274: [11, 13],
+    50960: [1.5, 2.4],
+    50912: [0.7, 1.3],
+    50885: [0.3, 1.2],
+    50861: [0, 35],
+    50878: [0, 35],
+    50867: [0, 130],
+    51003: [0.03, None],
+    50956: [95, None],
+}
+
 ITEM_IDS_UOM = {
-    'WEIGHT': {
-        226512: 'kg',
+    'WEIGHT': { #3723, 3580, 3581, 3582, 226512,226531,224639
         762: 'kg',
         763: 'kg',
+        3580: 'kg',
+        3581: 'lbs',
+        3582: 'oz',
+        226512: 'kg',
         226531: 'lbs',
         224639: 'kg',
-}, 'HEIGHT': {
+}, 'HEIGHT': { #920, 1394, 4187, 3486, 3485, 4188, 226707,226730
         920: 'in',
+        1394: 'in',
+        4187: 'in',
+        4188: 'cm',
+        3485: 'cm',
+        3486: 'in',
+        226707: 'in',
         226730: 'cm',
-}, 'SYSTOLIC BP': {
+}, 'SYSTOLIC BP': { #455,51,225309,442,6701
         455: 'mmHg',
         51: 'mmHg',
         225309: 'mmHg',
         442: 'mmHg',
         6701: 'mmHg',
-}, 'DIASTOLIC BP': {
+}, 'DIASTOLIC BP': { #8441,8368,225310,8440,8555
         8441: 'mmHg',
         8368: 'mmHg',
         225310: 'mmHg',
         8440: 'mmHg',
         8555: 'mmHg',
-}, 'TEMPERATURE': {
+}, 'TEMPERATURE': { #678,677,223761,679,676,223762,226329,227054
         678: 'F',
         677: 'C',
         223761: 'F',
@@ -69,18 +126,22 @@ ITEM_IDS_UOM = {
         226329: 'C',
         # 597: ,
         227054: 'F',
-}, 'RESPIRATORY RATE': {
+}, 'RESPIRATORY RATE': { #614,618,619,1635,1884,220210,224688,224689
+        614: 'bpm',
         618: 'bpm',
-        220210: 'bpm',
         619: 'bpm',
+        1635: 'bpm',
+        1884: 'bpm',
+        220210: 'bpm',
+        224688: 'bpm',
         224689: 'bpm',
         224690: 'bpm',
-        224688: 'bpm',
 }, 'HEART RATE': {
         211: 'bpm',
         220045: 'bpm',
-}, 'SPO2': {
+}, 'SPO2': { #646,6719,220277,1148,834
         646: '%',
+        834: '%',
         6719: '%',
         220277: '%',
     #}, 'BUN': {
