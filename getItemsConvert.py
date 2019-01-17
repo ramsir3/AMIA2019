@@ -1,65 +1,148 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 import os.path as path
-import mysql.connector, json, csv, time, sys
-from collections import OrderedDict
-from constants import DATA_PATH, CE_ITEM_LABELS, TOP_90_LE_ITEM_IDS, ITEM_IDS_UOM, CONVERSIONS, VALIDATIONS
+import mysql.connector, json, csv, time, sys, datetime
+from collections import OrderedDict, defaultdict
+from constants import DATA_PATH, PROCESSED_PATH, CE_ITEM_LABELS, TOP_90_LE_ITEM_IDS, ITEM_IDS_UOM, CONVERSIONS, VALIDATIONS
+from lablabels import LAB_LABELS
 
 # All item ids (CE & LE)
 ITEM_IDS = CE_ITEM_LABELS + TOP_90_LE_ITEM_IDS
+ITEM_LABELS = CE_ITEM_LABELS + [LAB_LABELS[i] for i in TOP_90_LE_ITEM_IDS]
 
 # Get item values from tables other than CE
-def getOtherItems(tables, row, hour, cursor, idict):
+def getOtherItems(tables, row, hour, cursor, idict, prior=False):
     for t in tables:
-        cursor.execute(
-            """
+        if prior:
+            q = """
+                SELECT
+                    `ITEMID`,
+                    `VALUENUM`
+                FROM `TIMED_%s`
+                WHERE time<%s AND SUBJECT_ID=%d AND HADM_ID=%d
+                """ %(t, hour, row[0], row[1])
+            cursor.execute(q)
+            for l in cursor:
+                if l[0] in idict:
+                    idict[l[0]].append(l[1])
+            q = """
+                SELECT
+                    `ITEMID`,
+                    `VALUENUM`
+                FROM `TIMED_%s`
+                WHERE SUBJECT_ID=%d AND HADM_ID IN (
+                    SELECT HADM_ID
+                    FROM `FILTERED_ADMISSIONS`
+                    WHERE SUBJECT_ID=%d AND ADMITTIME<(
+                        SELECT ADMITTIME 
+                        FROM `FILTERED_ADMISSIONS`
+                        WHERE SUBJECT_ID=%d AND HADM_ID=%d
+                    )
+                )
+                """ % (t, row[0], row[0], row[0], row[1])
+            cursor.execute(q)
+            for l in cursor:
+                if l[0] in idict:
+                    idict[l[0]].append(l[1])
+        else:
+            q = """
+                SELECT
+                    `ITEMID`,
+                    `VALUENUM`,
+                    `time`
+                FROM `TIMED_%s`
+                WHERE time>0 AND time<=%s AND SUBJECT_ID=%d AND HADM_ID=%d
+                """ %('CHARTEVENTS', hour, row[0], row[1])
+            cursor.execute(q)
+            latest = {}
+            for l in cursor:
+                if l[0] not in latest:
+                    latest[l[0]] = (l[2], [l[1]])
+                else:
+                    if l[2] > latest[l[0]][0]:
+                        latest[l[0]] = (l[2], [l[1]])
+                    if l[2] == latest[l[0]][0]:
+                        latest[l[0]][1].append(l[1])
+            for k, v in latest.items():
+                if k in idict:
+                    idict[k] = v[1]
+    return idict
+
+# Get item values from CE and perform unit conversions
+def getCEItems(row, hour, cursor, idict, prior=False):
+    if prior:
+        q = """
             SELECT
                 `ITEMID`,
                 `VALUENUM`
             FROM `TIMED_%s`
-            WHERE time=%s AND SUBJECT_ID=%d AND HADM_ID=%d
-            """ %(t, hour, row[0], row[1])
-        )
+            WHERE time<%s AND SUBJECT_ID=%d AND HADM_ID=%d
+            """ % ('CHARTEVENTS', hour, row[0], row[1])
+        cursor.execute(q)
         for l in cursor:
-            if l[0] in idict:
-                idict[l[0]].append(l[1])
+            for cat in ITEM_IDS_UOM:
+                if l[0] in ITEM_IDS_UOM[cat]:
+                    idict[cat].append(CONVERSIONS[cat](l[1], ITEM_IDS_UOM[cat][l[0]]))       
+        q = """
+            SELECT
+                `ITEMID`,
+                `VALUENUM`
+            FROM `TIMED_%s`
+            WHERE SUBJECT_ID=%d AND HADM_ID IN (
+                SELECT HADM_ID
+                FROM `FILTERED_ADMISSIONS`
+                WHERE SUBJECT_ID=%d AND ADMITTIME<(
+                    SELECT ADMITTIME 
+                    FROM `FILTERED_ADMISSIONS`
+                    WHERE SUBJECT_ID=%d AND HADM_ID=%d
+                )
+            )
+            """ % ('CHARTEVENTS', row[0], row[0], row[0], row[1])
+        cursor.execute(q)
+        for l in cursor:
+            for cat in ITEM_IDS_UOM:
+                if l[0] in ITEM_IDS_UOM[cat]:
+                    idict[cat].append(CONVERSIONS[cat](l[1], ITEM_IDS_UOM[cat][l[0]]))    
+    else:
+        q = """
+            SELECT
+                `ITEMID`,
+                `VALUENUM`,
+                `time`
+            FROM `TIMED_%s`
+            WHERE time<=%s AND SUBJECT_ID=%d AND HADM_ID=%d
+            """ %('CHARTEVENTS', hour, row[0], row[1])
+        cursor.execute(q)
+        latest = {}
+        for l in cursor:
+            if l[0] not in latest:
+                latest[l[0]] = (l[2], [l[1]])
+            else:
+                if l[2] > latest[l[0]][0]:
+                    latest[l[0]] = (l[2], [l[1]])
+                if l[2] == latest[l[0]][0]:
+                    latest[l[0]][1].append(l[1])
+
+        for itemid, values in latest.items():
+            for cat in ITEM_IDS_UOM:
+                if itemid in ITEM_IDS_UOM[cat]:
+                    for v in values[1]:
+                        idict[cat].append(CONVERSIONS[cat](v, ITEM_IDS_UOM[cat][itemid]))      
     return idict
 
-# Get item values from CE and perform unit conversions
-def getCEItems(row, hour, cursor, idict):
-    cursor.execute(
-        """
-        SELECT
-            `ITEMID`,
-            `VALUENUM`
-        FROM `TIMED_%s`
-        WHERE time=%s AND SUBJECT_ID=%d AND HADM_ID=%d
-        """ %('CHARTEVENTS', hour, row[0], row[1])
-    )
-    for l in cursor:
-        for cat in ITEM_IDS_UOM:
-            if l[0] in ITEM_IDS_UOM[cat]:
-                idict[cat].append(CONVERSIONS[cat](l[1], ITEM_IDS_UOM[cat][l[0]]))       
-    return idict
-
-
-def validate(itemid, value):
+def validate(itemid, value, margin):
     if itemid in VALIDATIONS:
-        if VALIDATIONS[itemid][0] != None and VALIDATIONS[itemid][1] != None:
-            return VALIDATIONS[itemid][0] >= value and VALIDATIONS[itemid][1] <= value
-        if VALIDATIONS[itemid][0] == None and VALIDATIONS[itemid][1] != None:
-            return VALIDATIONS[itemid][1] <= value
-        if VALIDATIONS[itemid][0] != None and VALIDATIONS[itemid][1] != None:
-            return VALIDATIONS[itemid][0] >= value
+        low = None if VALIDATIONS[itemid][0] == None else VALIDATIONS[itemid][0] * margin
+        hi = None if VALIDATIONS[itemid][1] == None else VALIDATIONS[itemid][1] * (1 + margin)
+        if low != None and hi != None:
+            return value >= low and value <= hi
+        elif low == None and hi != None:
+            return value <= hi
+        elif low != None and hi == None:
+            return value >= low
     return True
 
-# call getCEItems & getOtherItems, store them in a dict, and return the avg in the hour
-# if there is no observation for the item in the hour insert a '?'
-def getItems(tables, row, hour, cursor):
-    idict = OrderedDict((i, list()) for i in ITEM_IDS)
-    idict = getCEItems(row, hour, cursor, idict)
-    idict = getOtherItems(tables[1:], row, hour, cursor, idict)
-
+def clean(idict, margin=0.5):
     return_bool = False
     for k, v in idict.items():
         if len(v) == 0:
@@ -67,16 +150,30 @@ def getItems(tables, row, hour, cursor):
         else:
             return_bool = True
             rv = sum(v)/len(v)
-            if validate(k,rv):
+            if validate(k, rv, margin):
                 idict[k] = rv
             else:
-                idict[k] = '!'
-    
+                idict[k] = '!'# + str(rv)
+    return return_bool, idict
+
+# call getCEItems & getOtherItems, store them in a dict, and return the avg in the hour
+# if there is no observation for the item in the hour insert a '?'
+def getItems(tables, row, hour, cursor):
+    margin = 0.5
+    idict = OrderedDict((i, list()) for i in ITEM_IDS)
+    idict = getCEItems(row, hour, cursor, idict)
+    idict = getOtherItems(tables[1:], row, hour, cursor, idict)
+    return_bool, idict = clean(idict, margin)
+
+    if return_bool:            
+        pdict = OrderedDict((i, list()) for i in ITEM_IDS)
+        pdict = getCEItems(row, hour, cursor, pdict, True)
+        pdict = getOtherItems(tables[1:], row, hour, cursor, pdict, True)
+        _, pdict = clean(pdict, margin)
     # if no items were collected return None
-    if return_bool:
-        return list(idict.values())
+        return list(pdict.values()), list(idict.values())
     else:
-        return None
+        return None, None
 
 # get demographic information, the label, and the time of the staging (TSTAGE)
 # if the subject is AKI negative then label and TSTAGE = 0
@@ -102,12 +199,41 @@ def getDemos(row, hour, cursor):
         """ % (row[0], row[1], hour, 48 + int(hour))
     )
     label = cursor.fetchone()
+
+    plabel = None
+    if int(hour) > 1:
+        cursor.execute(
+            """
+            SELECT
+                `time`,
+                `STAGE`
+            FROM `cohort_hour_staged_nonzero`
+            WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time BETWEEN %d AND %d
+            """ % (row[0], row[1], int(hour) - 1, 47 + int(hour))
+        )
+        plabel = cursor.fetchone()
+    else:
+        cursor.execute(
+            """
+            SELECT
+                `time`,
+                `STAGE`
+            FROM `cohort_hour_staged_nonzero`
+            WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time < %d
+            """ % (row[0], row[1], int(hour))
+        )
+        plabel = cursor.fetchall()
+        if len(plabel) > 0:
+            plabel = plabel[-1]
+        
     if label == None:
         label = [0, 0]
-    return ([label[0], demo[0], 0 if demo[1] == 'F' else 1], [label[1]])
+    if plabel == None or len(plabel) == 0:
+        plabel = [0, 0]
+    return ([demo[0], 0 if demo[1] == 'F' else 1], list(plabel), list(label))
 
 # get items given hour
-def collectHour(hour, cursor1, cursor2, fnout, limit=(0, 1000)):
+def collectHour(hour, cursor1, cursor2, fnout, limit=(3, 100)):
     # q = """
     #     SELECT
     #         `SUBJECT_ID`,
@@ -132,9 +258,9 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(0, 1000)):
         """
     if limit != None:
         if type(limit) == tuple:
-            q += "\nLIMIT %d, %d" % limit
+            q += "        LIMIT %d, %d" % limit
         else:
-            q += "\nLIMIT %d" % limit
+            q += "        LIMIT %d" % limit
 
     #  write to an output file
     with open(fnout, 'w') as fout:
@@ -142,20 +268,19 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(0, 1000)):
         cfout.writerow([ # write headers
             "SUBJECT_ID",
             "HADM_ID",
-            "TSTAGE",
             "AGE",
             "GENDER",
             "ETHNICITY",
-        ] + ITEM_IDS + ["STAGE"])
+        ] + ['P ' + i for i in ITEM_LABELS] + ["P TSTAGE", "P STAGE"] + ITEM_LABELS + ["TSTAGE", "STAGE"])
         t0 = time.time()
         print(q)
         cursor1.execute(q)
         # for every subject & hadm id get items in CE & LE in the given hour
         for row in cursor1:
-            items = getItems(["CHARTEVENTS", "LABEVENTS"], row, hour, cursor2)
+            pitems, items = getItems(["CHARTEVENTS", "LABEVENTS"], row, hour, cursor2)
             if items != None:
-                demos, label = getDemos(row, hour, cursor2)
-                cfout.writerow(list(row[:2])+demos+list(row[2:])+items+label)
+                demos, plabel, label = getDemos(row, hour, cursor2)
+                cfout.writerow(list(row[:2])+demos+list(row[2:])+pitems+plabel+items+label)
         t1 = time.time()
         print("took %f s" % (t1 - t0))
 
@@ -181,8 +306,14 @@ mydb = mysql.connector.connect(**cfgs)
 cursor1 = mydb.cursor(buffered=True)
 cursor2 = mydb.cursor(buffered=True)
 
+
+#set output dir
+outpath = PROCESSED_PATH
+outpath = path.join(DATA_PATH, 'test')
+
 # run the function to get the csv output
-collectHour(hour, cursor1, cursor2, path.join(DATA_PATH, "HOUR_%05d.csv" % int(hour)), limit=None)
+print(datetime.datetime.now())
+collectHour(hour, cursor1, cursor2, path.join(outpath, "HOUR_%05d.csv" % int(hour)), limit=None)
 
 # close SQL connections
 cursor1.close()
