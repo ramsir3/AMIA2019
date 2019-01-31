@@ -4,3 +4,8 @@ data/*
 *.csv
 *.pyc
 .dbconfig.json
+__pycache__
+.vscode
+.ipynb_checkpoints
+output
+items
