@@ -11,18 +11,19 @@ def runAutoML(df_train, df_test):
               'GradientBoostingClassifier',
               'MiniBatchKMeans',
               'PassiveAggressiveClassifier',
-              'Perceptron',
+            #   'Perceptron',
               'RandomForestClassifier',
               'RidgeClassifier',
               'SGDClassifier',
-              'DeepLearningClassifier',
+            #   'DeepLearningClassifier',
               'LGBMClassifier',
               'XGBClassifier',
              ]
-    models = None
+    # models = None
     ml_predictor = Predictor(type_of_estimator='classifier', column_descriptions=column_descriptions)
-    ml_predictor.train(df_train, model_names=models)
-    return ml_predictor.score(df_test, df_test.STAGE)
+    ml_predictor.train(df_train, model_names=models, optimize_final_model=False)
+    score = ml_predictor.score(df_test, df_test.STAGE, advanced_scoring=True, verbose=3)
+    return score
 
 def runTPot(X_train, X_test, y_train, y_test):
     tpot = TPOTClassifier(generations=5, population_size=20, verbosity=2)

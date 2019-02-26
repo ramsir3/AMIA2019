@@ -6,20 +6,20 @@ import scipy as sp
 import pandas as pd
 from constants import PROCESSED_PATH, RAW_PATH
 from runTraditionalModels import runTraditionalModels
-from runAutoML import runAutoML, runTPot
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 from sklearn.utils import shuffle, resample
 from sklearn.model_selection import train_test_split
 
-def readData(dataPath):
+def readData(dataPath, dropNan=True):
     df = pd.read_csv(dataPath, na_values=['?', '!'])
     df.replace('!.+', np.nan, regex=True, inplace=True)
     check_for_nan_columns = set(df.columns) - {'SUBJECT_ID', 'HADM_ID', 'AGE', 'GENDER', 'ETHNICITY','P TSTAGE','P STAGE','TSTAGE','STAGE'}
     df = df.astype({k: np.float64 for k in check_for_nan_columns}, inplace=True)
     # drop rows where all features=nan
-    row_nan_bool = np.logical_not(np.all(np.isnan(df.iloc[:,5:-1]), axis=1))
-    df = df[row_nan_bool]
+    if dropNan:
+        row_nan_bool = np.logical_not(np.all(np.isnan(df.iloc[:,5:-1]), axis=1))
+        df = df[row_nan_bool]
     df.sort_values(['SUBJECT_ID', 'HADM_ID'], inplace=True)
     return df
 
@@ -28,8 +28,8 @@ def getDevelTestValidSplit(idsPath, df):
     split_df = {}
     for dataset in split_ids:
         split_df[dataset] = df[(df['SUBJECT_ID'].isin(split_ids[dataset][:,0])) & (df['HADM_ID'].isin(split_ids[dataset][:,1]))]
-    for k in split_df:
-        print(k, split_df[k].shape)
+    # for k in split_df:
+        # print(k, split_df[k].shape)
     #drop columns where all rows=nan
     check_nan = split_df['devel'].isna().sum()
     split_df['devel'] = split_df['devel'].drop(labels=check_nan[(check_nan == split_df['devel'].shape[0])].keys(), axis=1)
@@ -65,10 +65,10 @@ def runVIFAnalysis(data, vifCols):
         
         drop_items = sorted(vifs.items(), reverse=True, key=lambda kv: kv[1])
         if len(drop_items) > 0 and drop_items[0][1] >= 5:
-            print(drop_items[0])
+            # print(drop_items[0])
             features.drop(labels=[drop_items[0][0]], axis=1, inplace=True)
         else:
-            print(drop_items)
+            # print(drop_items)
             done = True
     return list(features.columns)
 
@@ -81,7 +81,7 @@ def mode_or_mean(x):
         return x.mean()
 
 def synthesizeData(split_df, means, n_samples=5):
-    print("synthesizing data")
+    # print("synthesizing data")
     devel_dist = {}
     for s in [0,1,2,3]:
         devel_dist[s] = split_df['devel'][(split_df['devel']['STAGE'] == s)].shape[0] / split_df['devel'].shape[0]
@@ -97,9 +97,9 @@ def synthesizeData(split_df, means, n_samples=5):
             dists[subset][s] = counts[subset][s] / split_df[subset].shape[0]
     ratios = {}
     for subset in dists:
-        print(subset, dists[subset])
+        # print(subset, dists[subset])
         ratios[subset] = {c: dists[subset][c]/devel_dist[c] for c in devel_dist}
-        print('ratio', ratios[subset])
+        # print('ratio', ratios[subset])
 
     split_df['test'].fillna(means, inplace=True)
     split_df['valid'].fillna(means, inplace=True)
@@ -112,7 +112,7 @@ def synthesizeData(split_df, means, n_samples=5):
         for c in ratios[subset]:
             if ratios[subset][c] < 1:
                 num_syn = math.ceil((1-ratios[subset][c])*counts[subset][c])
-                print(subset, c, counts[subset][c], num_syn)
+                # print(subset, c, counts[subset][c], num_syn)
                 synthesize[subset][c] = num_syn
     for subset in synthesize:
         for c in synthesize[subset]:
@@ -123,10 +123,10 @@ def synthesizeData(split_df, means, n_samples=5):
                     )
                 synth = samples.apply(mode_or_mean)
                 split_df[subset] = split_df[subset].append(synth, ignore_index=True)
-            print(subset, split_df[subset].shape)
-    for subset in synthesize:
-        for c in synthesize[subset]:
-            print(subset, c, split_df[subset][(split_df[subset]['STAGE'] == c)].shape[0])
+            # print(subset, split_df[subset].shape)
+    # for subset in synthesize:
+    #     for c in synthesize[subset]:
+    #         # print(subset, c, split_df[subset][(split_df[subset]['STAGE'] == c)].shape[0])
 
     return split_df
 

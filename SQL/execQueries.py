@@ -63,7 +63,18 @@ SELECT d.* FROM (
 # CREATE INDEX main_idx ON TIMED_CHARTEVENTS(SUBJECT_ID,HADM_ID,ITEMID,time)
 # """,]
 
-queries = None
+row = [-1,-1]
+hour = -1
+queries = ["""
+SELECT
+    `time`,
+    `STAGE`
+FROM `cohort_hour_staged_nonzero`
+WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time BETWEEN %d AND %d
+""" % (row[0], row[1], int(hour) - 1, 47 + int(hour))
+]
+
+# queries = None
 nargs = len(sys.argv)
 if queries != None or nargs > 1:
     cfgs = None
@@ -83,8 +94,10 @@ if queries != None or nargs > 1:
         t0 = time.time()
         print(q)
         cursor.execute(q)
-        for l in cursor:
-            print(l)
+        l = cursor.fetchone()
+        # for l in cursor:
+        #     pass
+        print(l)
         t1 = time.time()
         print("took %f s" % (t1 - t0))
 
