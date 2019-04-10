@@ -1,0 +1,226 @@
+
+ hpo_HOUR_00001_48.db 
+ id                                     4802
+_loss                             -0.503723
+max_depth                                 6
+min_samples_split                        44
+model                RandomForestClassifier
+n_estimators                            150
+Name: 204, dtype: object
+{'max_depth': 6, 'min_samples_split': 44, 'n_estimators': 150}
+(11757, 95) (11757, 4) (3954, 95) (3954, 4)
+hpo_HOUR_00001_48.db.csv
+RandomForestClassifier
+y_predict (3954,)
+y_test (3954,)
+pp (3954, 2)
+DONE
+
+
+
+ hpo_HOUR_00001_6.db 
+ id                                    37072
+_loss                             -0.503776
+max_depth                                16
+min_samples_split                       160
+model                RandomForestClassifier
+n_estimators                            325
+Name: 87, dtype: object
+{'max_depth': 16, 'min_samples_split': 160, 'n_estimators': 325}
+(11757, 95) (11757, 4) (3954, 95) (3954, 4)
+hpo_HOUR_00001_6.db.csv
+RandomForestClassifier
+y_predict (3954,)
+y_test (3954,)
+pp (3954, 2)
+DONE
+
+
+
+ hpo_HOUR_00001_24.db 
+ id                                    38390
+_loss                             -0.499711
+max_depth                                12
+min_samples_split                       336
+model                RandomForestClassifier
+n_estimators                            325
+Name: 117, dtype: object
+{'max_depth': 12, 'min_samples_split': 336, 'n_estimators': 325}
+(11757, 95) (11757, 4) (3954, 95) (3954, 4)
+hpo_HOUR_00001_24.db.csv
+RandomForestClassifier
+y_predict (3954,)
+y_test (3954,)
+pp (3954, 2)
+DONE
+
+
+
+ hpo_HOUR_00024_24.db 
+ id                                    51067
+_loss                             -0.513051
+max_depth                                16
+min_samples_split                       232
+model                RandomForestClassifier
+n_estimators                            400
+Name: 38, dtype: object
+{'max_depth': 16, 'min_samples_split': 232, 'n_estimators': 400}
+(22051, 96) (22051, 4) (7709, 96) (7709, 4)
+hpo_HOUR_00024_24.db.csv
+RandomForestClassifier
+y_predict (7709,)
+y_test (7709,)
+pp (7709, 2)
+DONE
+
+
+
+ hpo_HOUR_00024_72.db 
+ id                                    60599
+_loss                             -0.505482
+max_depth                                30
+min_samples_split                       306
+model                RandomForestClassifier
+n_estimators                            450
+Name: 204, dtype: object
+{'max_depth': 30, 'min_samples_split': 306, 'n_estimators': 450}
+(22051, 96) (22051, 4) (7709, 96) (7709, 4)
+hpo_HOUR_00024_72.db.csv
+RandomForestClassifier
+y_predict (7709,)
+y_test (7709,)
+pp (7709, 2)
+DONE
+
+
+
+ hpo_HOUR_00024_48.db 
+ id                                    64363
+_loss                             -0.503165
+max_depth                                28
+min_samples_split                       210
+model                RandomForestClassifier
+n_estimators                            475
+Name: 155, dtype: object
+{'max_depth': 28, 'min_samples_split': 210, 'n_estimators': 475}
+(22051, 96) (22051, 4) (7709, 96) (7709, 4)
+hpo_HOUR_00024_48.db.csv
+RandomForestClassifier
+y_predict (7709,)
+y_test (7709,)
+pp (7709, 2)
+DONE
+
+
+
+ hpo_HOUR_00024_6.db 
+ id                                      232
+_loss                             -0.508942
+max_depth                                26
+min_samples_split                       582
+model                RandomForestClassifier
+n_estimators                            200
+Name: 232, dtype: object
+{'max_depth': 26, 'min_samples_split': 582, 'n_estimators': 200}
+(22051, 96) (22051, 4) (7709, 96) (7709, 4)
+hpo_HOUR_00024_6.db.csv
+RandomForestClassifier
+y_predict (7709,)
+y_test (7709,)
+pp (7709, 2)
+DONE
+
+
+
+ hpo_HOUR_00012_48.db 
+ id                                      224
+_loss                             -0.507141
+max_depth                                30
+min_samples_split                       262
+model                RandomForestClassifier
+n_estimators                            175
+Name: 224, dtype: object
+{'max_depth': 30, 'min_samples_split': 262, 'n_estimators': 175}
+(20312, 95) (20312, 4) (6968, 95) (6968, 4)
+hpo_HOUR_00012_48.db.csv
+RandomForestClassifier
+y_predict (6968,)
+y_test (6968,)
+pp (6968, 2)
+DONE
+
+
+
+ hpo_HOUR_00012_72.db 
+ id                                    23675
+_loss                             -0.506701
+max_depth                                12
+min_samples_split                       168
+model                RandomForestClassifier
+n_estimators                            250
+Name: 166, dtype: object
+{'max_depth': 12, 'min_samples_split': 168, 'n_estimators': 250}
+(20312, 95) (20312, 4) (6968, 95) (6968, 4)
+hpo_HOUR_00012_72.db.csv
+RandomForestClassifier
+y_predict (6968,)
+y_test (6968,)
+pp (6968, 2)
+DONE
+
+
+
+ hpo_HOUR_00012_24.db 
+ id                                    19765
+_loss                             -0.505614
+max_depth                                22
+min_samples_split                       244
+model                RandomForestClassifier
+n_estimators                            225
+Name: 121, dtype: object
+{'max_depth': 22, 'min_samples_split': 244, 'n_estimators': 225}
+(20312, 95) (20312, 4) (6968, 95) (6968, 4)
+hpo_HOUR_00012_24.db.csv
+RandomForestClassifier
+y_predict (6968,)
+y_test (6968,)
+pp (6968, 2)
+DONE
+
+
+
+ hpo_HOUR_00012_6.db 
+ id                                    28259
+_loss                             -0.507415
+max_depth                                30
+min_samples_split                       180
+model                RandomForestClassifier
+n_estimators                            275
+Name: 45, dtype: object
+{'max_depth': 30, 'min_samples_split': 180, 'n_estimators': 275}
+(20312, 95) (20312, 4) (6968, 95) (6968, 4)
+hpo_HOUR_00012_6.db.csv
+RandomForestClassifier
+y_predict (6968,)
+y_test (6968,)
+pp (6968, 2)
+DONE
+
+
+
+ hpo_HOUR_00001_72.db 
+ id                                   114051
+_loss                              -0.48984
+max_depth                                14
+min_samples_split                       258
+model                RandomForestClassifier
+n_estimators                            750
+Name: 82, dtype: object
+{'max_depth': 14, 'min_samples_split': 258, 'n_estimators': 750}
+(11757, 95) (11757, 4) (3954, 95) (3954, 4)
+hpo_HOUR_00001_72.db.csv
+RandomForestClassifier
+y_predict (3954,)
+y_test (3954,)
+pp (3954, 2)
+DONE

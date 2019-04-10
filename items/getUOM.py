@@ -43,7 +43,7 @@ if nargs > 2:
     print("took %f s" % (t1 - t0))
 
     with open(infn, 'r') as inf:
-        with open(os.path.join(PROCESSED_PATH, infn), 'w') as outf:
+        with open(os.path.basename(infn), 'w') as outf:
             cinf = csv.reader(inf, delimiter=',')
             coutf = csv.writer(outf)
             cinf.__next__() #throw away header

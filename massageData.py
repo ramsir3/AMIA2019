@@ -4,21 +4,39 @@ import os.path, pickle, math
 import numpy as np
 import scipy as sp
 import pandas as pd
+
+from zipfile import ZipFile
 from constants import PROCESSED_PATH, RAW_PATH
-from runTraditionalModels import runTraditionalModels
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 from sklearn.utils import shuffle, resample
 from sklearn.model_selection import train_test_split
 
+
+def readZipData(dataPath, name, dropNan=True):
+    with ZipFile(dataPath) as zf:
+        with zf.open(name) as f:
+            df = pd.read_csv(f, na_values=['?', '!'])
+            df.replace('!.+', np.nan, regex=True, inplace=True)
+            check_for_nan_columns = set(df.columns) - {'SUBJECT_ID', 'HADM_ID', 'AGE', 'GENDER', 'ETHNICITY','P TSTAGE','P STAGE','TSTAGE','STAGE'}
+            check_for_nan_columns = check_for_nan_columns - {c for c in df.columns if 'STAGE' in c}
+            df = df.astype({k: np.float64 for k in check_for_nan_columns}, inplace=True)
+            # drop rows where all features=nan
+            if dropNan:
+                row_nan_bool = np.logical_not(np.all(np.isnan(df[check_for_nan_columns]), axis=1))
+                df = df[row_nan_bool]
+            df.sort_values(['SUBJECT_ID', 'HADM_ID'], inplace=True)
+            return df
+
 def readData(dataPath, dropNan=True):
     df = pd.read_csv(dataPath, na_values=['?', '!'])
     df.replace('!.+', np.nan, regex=True, inplace=True)
     check_for_nan_columns = set(df.columns) - {'SUBJECT_ID', 'HADM_ID', 'AGE', 'GENDER', 'ETHNICITY','P TSTAGE','P STAGE','TSTAGE','STAGE'}
+    check_for_nan_columns = check_for_nan_columns - {c for c in df.columns if 'STAGE' in c}
     df = df.astype({k: np.float64 for k in check_for_nan_columns}, inplace=True)
     # drop rows where all features=nan
     if dropNan:
-        row_nan_bool = np.logical_not(np.all(np.isnan(df.iloc[:,5:-1]), axis=1))
+        row_nan_bool = np.logical_not(np.all(np.isnan(df[check_for_nan_columns]), axis=1))
         df = df[row_nan_bool]
     df.sort_values(['SUBJECT_ID', 'HADM_ID'], inplace=True)
     return df
@@ -37,7 +55,8 @@ def getDevelTestValidSplit(idsPath, df):
 
 def runRiskFactorAnalysis(data, kruskalCols, threshold=0.05):
 # calculate Kruskal-Wallis H-test for each feature
-    dfs_by_class = [data.loc[data['STAGE'] == c] for c in [0,1,2,3]]
+    labels = [l for l in data.columns if ('STAGE' in l) and ('P' not in l) and (l[0] != 'T')]
+    dfs_by_class = [data.loc[data[labels[0]] == c] for c in [0,1,2,3]]
     kruskals = {}
     for col in kruskalCols:
         col_in_classes = [np.asarray(c[col].dropna()) for c in dfs_by_class]
@@ -48,7 +67,7 @@ def runRiskFactorAnalysis(data, kruskalCols, threshold=0.05):
     return [k for k, v in kruskals.items() if v > threshold]
 
 def meanImpute(data, means=None):
-    if means == None:
+    if means is None:
         means = data.mean()
     data.fillna(means, inplace=True)
     return means
@@ -62,7 +81,7 @@ def runVIFAnalysis(data, vifCols):
         for i, n in enumerate(features):
             if i in range(features.shape[1]):
                 vifs[n] = variance_inflation_factor(np.asarray(features), i)
-        
+
         drop_items = sorted(vifs.items(), reverse=True, key=lambda kv: kv[1])
         if len(drop_items) > 0 and drop_items[0][1] >= 5:
             # print(drop_items[0])
@@ -80,16 +99,17 @@ def mode_or_mean(x):
     else:
         return x.mean()
 
-def synthesizeData(split_df, means, n_samples=5):
+def synthesizeData(split_df, means, labelHour, n_samples=5):
     # print("synthesizing data")
+    stage = 'STAGE%d' % labelHour
     devel_dist = {}
     for s in [0,1,2,3]:
-        devel_dist[s] = split_df['devel'][(split_df['devel']['STAGE'] == s)].shape[0] / split_df['devel'].shape[0]
+        devel_dist[s] = split_df['devel'][(split_df['devel'][stage] == s)].shape[0] / split_df['devel'].shape[0]
 
     counts = {subset: dict() for subset in ['test', 'valid']}
     for subset in counts:
         for s in [0,1,2,3]:
-            counts[subset][s] = split_df[subset][(split_df[subset]['STAGE'] == s)].shape[0]
+            counts[subset][s] = split_df[subset][(split_df[subset][stage] == s)].shape[0]
 
     dists = {subset: dict() for subset in ['test', 'valid']}
     for subset in dists:
@@ -118,7 +138,7 @@ def synthesizeData(split_df, means, n_samples=5):
         for c in synthesize[subset]:
             for s in range(synthesize[subset][c]):
                 samples = resample(
-                        split_df[subset][(split_df[subset]['STAGE'] == c)],
+                        split_df[subset][(split_df[subset][stage] == c)],
                         n_samples=n_samples,
                     )
                 synth = samples.apply(mode_or_mean)
@@ -126,22 +146,39 @@ def synthesizeData(split_df, means, n_samples=5):
             # print(subset, split_df[subset].shape)
     # for subset in synthesize:
     #     for c in synthesize[subset]:
-    #         # print(subset, c, split_df[subset][(split_df[subset]['STAGE'] == c)].shape[0])
+    #         # print(subset, c, split_df[subset][(split_df[subset][stage] == c)].shape[0])
 
     return split_df
 
-def runPipeline(data, splitIDsPath, featuresCols, doRFA=False, doVIFA=False):
+def runPipeline(data, splitIDsPath, featuresCols, labelHours, doRFA=False, doVIFA=False, normImpute=False):
     split_df = getDevelTestValidSplit(splitIDsPath, data)
+    featuresCols = [c for c in featuresCols if c in split_df['devel']]
+
     if doRFA:
         kcols = runRiskFactorAnalysis(split_df['devel'], featuresCols)
         split_df['devel'] = split_df['devel'].drop(list(set(featuresCols)-set(kcols)), axis=1)
         featuresCols = kcols
+
+    means = None
+    # fc = split_df['devel'].columns.groupby(split_df['devel'].dtypes)[np.dtype(float)]
+    # print(np.sum(np.isnan(split_df['devel'][fc].values)))
+    if normImpute:
+        means = pickle.load(open(os.path.join(PROCESSED_PATH, 'avgvector_normals.pickle'), 'rb'))
+        split_df['devel'] = split_df['devel'].fillna(means)
+        split_df['test'] = split_df['test'].fillna(means)
+        split_df['valid'] = split_df['valid'].fillna(means)
+
     means = meanImpute(split_df['devel'])
+    meanImpute(split_df['test'], means)
+    meanImpute(split_df['valid'], means)
+    # print(np.sum(np.isnan(split_df['devel'][fc].values)))
+
     if doVIFA:
         vcols = runVIFAnalysis(split_df['devel'], featuresCols)
         split_df['devel'] = split_df['devel'].drop(list(set(featuresCols)-set(vcols)), axis=1)
 
-    split_df = synthesizeData(split_df, means)
+    for labelHour in labelHours:
+        split_df = synthesizeData(split_df, means, labelHour)
     return split_df
 
 

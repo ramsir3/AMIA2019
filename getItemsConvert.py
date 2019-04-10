@@ -178,7 +178,7 @@ def getItems(tables, row, hour, cursor):
 # get demographic information, the label, and the time of the staging (TSTAGE)
 # if the subject is AKI negative then label and TSTAGE = 0
 # Male is coded as 1, Female is 0
-def getDemos(row, hour, cursor):
+def getDemos(row, hour, cursor, labelHours):
     cursor.execute(
         """
         SELECT
@@ -189,29 +189,32 @@ def getDemos(row, hour, cursor):
         """ % (row[0], row[1])
     )
     demo = cursor.fetchone()
-    cursor.execute(
-        """
-        SELECT
-            `time`,
-            `STAGE`
-        FROM `cohort_hour_staged_nonzero`
-        WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time BETWEEN %s AND %d
-        """ % (row[0], row[1], hour, 48 + int(hour))
-    )
-    label = cursor.fetchone()
-
-    plabel = None
-    if int(hour) > 1:
+    label = []
+    for h in labelHours:
         cursor.execute(
             """
             SELECT
                 `time`,
                 `STAGE`
             FROM `cohort_hour_staged_nonzero`
-            WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time BETWEEN %d AND %d
-            """ % (row[0], row[1], int(hour) - 1, 47 + int(hour))
+            WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time BETWEEN %s AND %d
+            """ % (row[0], row[1], hour, h + int(hour))
         )
-        plabel = cursor.fetchone()
+        label.append(cursor.fetchone())
+
+    plabel = []
+    if int(hour) > 1:
+        for h in labelHours:
+            cursor.execute(
+                """
+                SELECT
+                    `time`,
+                    `STAGE`
+                FROM `cohort_hour_staged_nonzero`
+                WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time BETWEEN %d AND %d
+                """ % (row[0], row[1], int(hour) - 1, h - 1 + int(hour))
+            )
+            plabel.append(cursor.fetchone())
     else:
         cursor.execute(
             """
@@ -222,18 +225,20 @@ def getDemos(row, hour, cursor):
             WHERE SUBJECT_ID=%d AND HADM_ID=%d AND time < %d
             """ % (row[0], row[1], int(hour))
         )
-        plabel = cursor.fetchall()
-        if len(plabel) > 0:
-            plabel = plabel[-1]
-        
-    if label == None:
-        label = [0, 0]
-    if plabel == None or len(plabel) == 0:
-        plabel = [0, 0]
-    return ([demo[0], 0 if demo[1] == 'F' else 1], list(plabel), list(label))
+        plabels = cursor.fetchall()
+        if len(plabels) > 0:
+            plabel = [plabels[-1] for h in labelHours]
+
+    label = [f(l) if l != None else f([0,0]) for l in label for f in (lambda x: x[s] for s in [0,1])]
+    if len(plabel) > 0:
+        plabel = [f(l) if l != None else f([0,0]) for l in plabel for f in (lambda x: x[s] for s in [0,1])]
+    else:
+        plabel = [0 for l in label]
+
+    return ([demo[0], 0 if demo[1] == 'F' else 1], plabel, label)
 
 # get items given hour
-def collectHour(hour, cursor1, cursor2, fnout, limit=(3, 100)):
+def collectHour(hour, cursor1, cursor2, fnout, labelHours=[6, 12, 24, 36, 48, 72], limit=(3, 100)):
     # q = """
     #     SELECT
     #         `SUBJECT_ID`,
@@ -266,12 +271,18 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(3, 100)):
     with open(fnout, 'w') as fout:
         cfout = csv.writer(fout)
         cfout.writerow([ # write headers
-            "SUBJECT_ID",
-            "HADM_ID",
-            "AGE",
-            "GENDER",
-            "ETHNICITY",
-        ] + ['P ' + i for i in ITEM_LABELS] + ["P TSTAGE", "P STAGE"] + ITEM_LABELS + ["TSTAGE", "STAGE"])
+                "SUBJECT_ID",
+                "HADM_ID",
+                "AGE",
+                "GENDER",
+                "ETHNICITY",
+            ]
+            + ['P ' + i for i in ITEM_LABELS]
+            + [f(h) for h in labelHours for f in (lambda x: '%s%d'%(s,x) for s in ["PTSTAGE", "PSTAGE"])]
+            + ITEM_LABELS
+            + [f(h) for h in labelHours for f in (lambda x: '%s%d'%(s,x) for s in ["TSTAGE", "STAGE"])]
+        )
+
         t0 = time.time()
         print(q)
         cursor1.execute(q)
@@ -279,7 +290,7 @@ def collectHour(hour, cursor1, cursor2, fnout, limit=(3, 100)):
         for row in cursor1:
             pitems, items = getItems(["CHARTEVENTS", "LABEVENTS"], row, hour, cursor2)
             if items != None:
-                demos, plabel, label = getDemos(row, hour, cursor2)
+                demos, plabel, label = getDemos(row, hour, cursor2, labelHours)
                 cfout.writerow(list(row[:2])+demos+list(row[2:])+pitems+plabel+items+label)
         t1 = time.time()
         print("took %f s" % (t1 - t0))
@@ -309,11 +320,14 @@ cursor2 = mydb.cursor(buffered=True)
 
 #set output dir
 outpath = PROCESSED_PATH
+# outpath = path.join(DATA_PATH, 'hour')
 outpath = path.join(DATA_PATH, 'test')
+limit = None
+# limit = 10
 
 # run the function to get the csv output
 print(datetime.datetime.now())
-collectHour(hour, cursor1, cursor2, path.join(outpath, "HOUR_%05d.csv" % int(hour)), limit=None)
+collectHour(hour, cursor1, cursor2, path.join(outpath, "HOUR_%05d.csv" % int(hour)), limit=limit)
 
 # close SQL connections
 cursor1.close()

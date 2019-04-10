@@ -42,7 +42,7 @@ def calcScores(rs):
     ppv = rs[0]/(rs[0]+rs[1])
     npv = rs[2]/(rs[2]+rs[3])
     sen = rs[0]/(rs[0]+rs[3])
-    spe = rs[2]/(rs[0]+rs[1])
+    spe = rs[2]/(rs[2]+rs[1])
     f1  = (2*rs[0])/((2*rs[0])+rs[1]+rs[3])
     return (auc,ppv,npv,sen,spe,f1)   
 
